@@ -1,4 +1,4 @@
-from .utils import read_script
+from .parser import parse_swipy
 
 def extract_root(component):
     """
@@ -11,6 +11,6 @@ def extract_swipy(path):
     """
     Extracting swipy script from path.
     """
-    components = tuple(read_script(path))
-    root = extract_root(components[0])
+    components = parse_swipy(path)
+    root = next(components)[2]
     return root, (), {}

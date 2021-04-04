@@ -1,13 +1,13 @@
 import re
 
-from .utils import read_script
+from .parser import parse_swipy
 from .exception import SwipyValidationError
 
 def validate_root(component):
     """
     Validate syntax of root activity.
     """
-    args = re.findall(r"[^'\s]\S*|'.+?'", component)[1:]
+    args = re.findall(r"([^'\s]\S*|'.+?')", component)
     c = [
         len(args) == 1,
         args[0].isprintable()
@@ -18,7 +18,7 @@ def validate_collect(component):
     """
     Validate syntax of collect activity
     """
-    args = re.findall(r"[^'\s]\S*|'.+?'", component)[1:]
+    args = re.findall(r"([^'\s]\S*|'.+?')", component)
     c = [
         len(args) == 2,
         args[0].isalnum(),
@@ -36,9 +36,12 @@ def validate_swipy(path):
     """
     Validate swipy file from path.
     """
-    components = read_script(path)
-    for line, component in enumerate(components):
-        activity = component.split(' ', 1)[0]
-        if not (VALIDATORS[activity](component)):
-            raise SwipyValidationError(activity, line)
+    components = parse_swipy(path)
+    try:
+        while(1):
+            line_id, activity, arguments = next(components)
+            if not (VALIDATORS[activity](arguments)):
+                raise SwipyValidationError(activity, line_id)
+    except StopIteration:
+        pass
     return True
