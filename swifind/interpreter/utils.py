@@ -4,4 +4,5 @@ def read_script(path):
     """
     with open(path, 'r') as f:
         raw = f.read()
-    return raw
+    fltr = filter(lambda x: x != '', raw.split('\n'))
+    return fltr

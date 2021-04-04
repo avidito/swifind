@@ -11,6 +11,6 @@ def extract_swipy(path):
     """
     Extracting swipy script from path.
     """
-    raw = read_script(path)[:-1].split('\n')
-    root = extract_root(raw[0])
+    components = tuple(read_script(path))
+    root = extract_root(components[0])
     return root, (), {}

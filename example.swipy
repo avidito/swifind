@@ -1,1 +1,3 @@
 root https://quotes.toscrape.com/
+
+collect title 'body > div > div.row.header-box > div.col-md-8 > h1 > a'
