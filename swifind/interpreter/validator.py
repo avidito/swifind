@@ -1,29 +1,25 @@
-def read_script(path):
-    """
-    Reading script from path.
-    """
-    with open(path, 'r') as f:
-        raw = f.read()
-    return raw
+from .utils import read_script
+from .exception import SwipyValidationError
 
-def validate_script(path):
+def validate_root(component):
+    """
+    Validate syntax of root activity.
+    """
+    c1 = component.count(' ') == 1
+    return c1
+
+# Validator Functions
+VALIDATORS = {
+    'root': validate_root,
+}
+
+def validate_swipy(path):
     """
     Validate swipy file from path.
     """
-    raw = read_script(path).split('\n')
-    for row in raw[-1]:
-        component = row.split(' ')[0]
-        if (validator[component](row)):
-            return False
+    raw = read_script(path)[:-1].split('\n')
+    for line, row in enumerate(raw):
+        component = row.split(' ', 1)[0]
+        if not (VALIDATORS[component](row)):
+            raise SwipyValidationError(component, line)
     return True
-
-def root_validation(script):
-    """
-    Validate syntax of root command.
-    """
-    c1 = len(script.split('=')) == 2
-    return (c1)
-
-validator = {
-    'root': root_validation,
-}
