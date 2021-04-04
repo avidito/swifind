@@ -10,7 +10,7 @@ class Swimmer:
     """
     def __init__(self, path):
         self.validate = validate_swipy(path)
-        self.root, self.strategies, self.payload = extract_swipy(path)
+        self.root, self.bucket, self.strategy = extract_swipy(path)
 
     def swim(self):
         """

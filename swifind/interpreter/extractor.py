@@ -1,4 +1,6 @@
 from .parser import parse_swipy
+from ..bucket import Bucket
+from ..strategy import Strategy
 
 def extract_root(component):
     """
@@ -13,4 +15,4 @@ def extract_swipy(path):
     """
     components = parse_swipy(path)
     root = next(components)[2]
-    return root, (), {}
+    return root, Bucket(), Strategy()
