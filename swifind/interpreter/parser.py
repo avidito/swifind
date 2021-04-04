@@ -4,7 +4,7 @@ def read_script(path):
     """
     with open(path, 'r') as f:
         raw = f.read()
-    raw_components = ((line_id, line) for line_id, line in enumerate(raw.split('\n')) if (line != ''))
+    raw_components = ((line_id, line.strip()) for line_id, line in enumerate(raw.split('\n')) if (line != ''))
     return raw_components
 
 def parse_swipy(path):
@@ -12,5 +12,5 @@ def parse_swipy(path):
     Parse swipy script to list of component.
     """
     raw_components = read_script(path)
-    components = ((line_id, *line.split(' ', 1)) for line_id, line in raw_components)
+    components = ((line_id, *line.split(' ', 1)) if (line.count(' ')) else (line_id, line.strip(), '') for line_id, line in raw_components)
     return components

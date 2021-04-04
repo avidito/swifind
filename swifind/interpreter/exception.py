@@ -3,6 +3,34 @@ class SwipyValidationError(Exception):
     """
     Raised when the syntax is violate swipy rule.
     """
-    def __init__(self, component, line):
-        message = f"Error while validate `{component}` on line {line}"
+    def __init__(self, message):
+        super().__init__(message)
+
+class ArgumentsError(SwipyValidationError):
+    """
+    Raised when activity arguments violate swipy rule.
+    """
+    def __init__(self, activity, line_id):
+        self.activity = activity
+        self.line_id = line_id
+
+    def missing(self, argument_missing):
+        """
+        Raised when there is missing arguments.
+        """
+        message = f"'{self.activity}' activity missing required arguments: '{argument_missing}' at line {self.line_id}."
+        super().__init__(message)
+
+    def over(self, argument_need, argument_given):
+        """
+        Raised when there is too many arguments.
+        """
+        message = f"'{self.activity}' activity takes {argument_need} arguments by {argument_given} were given at line {self.line_id}."
+        super().__init__(message)
+
+    def type(self, argument_type_error):
+        """
+        Raised when there is arguments with wrong format or data type.
+        """
+        message = f"`{argument_type_error}` from `{self.activity}` activity is violates swipy rule at line {self.line_id}."
         super().__init__(message)

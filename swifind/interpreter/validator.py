@@ -1,20 +1,23 @@
 import re
 
 from .parser import parse_swipy
-from .exception import SwipyValidationError
+from .exception import ArgumentsError
 
-def validate_root(component):
+def validate_root(component, line_id):
     """
     Validate syntax of root activity.
     """
     args = re.findall(r"([^'\s]\S*|'.+?')", component)
-    c = [
-        len(args) == 1,
-        args[0].isprintable()
-    ]
-    return all(c)
+    arguments_error = ArgumentsError('root', line_id)
+    args_count = len(args)
+    if (args_count < 1): arguments_error.missing(argument_missing=ARGUMENTS['root'][args_count])
+    elif(args_count > 1): arguments_error.over(argument_need=1, argument_given=args_count)
+    elif(not args[0].isprintable()): arguments_error.type(argument_type_error=ARGUMENTS['root'][0])
+    else: return
 
-def validate_collect(component):
+    raise arguments_error
+
+def validate_collect(component, line_id):
     """
     Validate syntax of collect activity
     """
@@ -26,12 +29,17 @@ def validate_collect(component):
     ]
     return all(c)
 
-# Validator Functions
 VALIDATORS = {
     'root': validate_root,
     'collect': validate_collect
 }
 
+ARGUMENTS = {
+    'root': ('URL',),
+    'collect': ('ID', 'PATH',)
+}
+
+# Validator Functions
 def validate_swipy(path):
     """
     Validate swipy file from path.
@@ -40,8 +48,7 @@ def validate_swipy(path):
     try:
         while(1):
             line_id, activity, arguments = next(components)
-            if not (VALIDATORS[activity](arguments)):
-                raise SwipyValidationError(activity, line_id)
+            VALIDATORS[activity](arguments, line_id)
     except StopIteration:
         pass
     return True

@@ -9,7 +9,7 @@ class Swimmer:
     Default swimmer class.
     """
     def __init__(self, path):
-        validate_swipy(path)
+        self.validate = validate_swipy(path)
         self.root, self.strategies, self.payload = extract_swipy(path)
 
     def swim(self):
