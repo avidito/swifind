@@ -1,16 +1,16 @@
 import requests
 import bs4
 
-from .interpreter.validator import validate_script
-from .interpreter.extractor import root_extract
+from .interpreter.validator import validate_swipy
+from .interpreter.extractor import extract_swipy
 
 class Swimmer:
     """
     Default swimmer class.
     """
     def __init__(self, path):
-        validate_script(path)
-        self.root = root_extract(path)
+        self.validate = validate_swipy(path)
+        self.root, self.strategies, self.payload = extract_swipy(path)
 
     def swim(self):
         """

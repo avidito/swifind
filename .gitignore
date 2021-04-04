@@ -1,7 +1,6 @@
-test.py
+plan.txt
 
+dev/
 __pycache__/
 
-test.*
-
-*.txt
+test*
