@@ -15,4 +15,4 @@ def extract_swipy(path):
     """
     components = parse_swipy(path)
     root = next(components)[2]
-    return root, Bucket(), Strategy()
+    return root, Bucket(), Strategy(root)
