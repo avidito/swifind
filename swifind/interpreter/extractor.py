@@ -6,13 +6,15 @@ def extract_root(component):
     """
     Extracting root information.
     """
-    root = component.split(' ', 2)[1]
+    root = next(component)[2]
     return root
 
+
+# Extractor Functions
 def extract_swipy(path):
     """
-    Extracting swipy script from path.
+    Extracting swipy script from path and load to strategy.
     """
     components = parse_swipy(path)
-    root = next(components)[2]
-    return root, Bucket(), Strategy(root)
+    strategy = Strategy(extract_root(components))
+    return Bucket(), strategy

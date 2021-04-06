@@ -2,17 +2,40 @@ class Strategy:
     """
     Function sequence handler for each swimmer.
     """
-    def __init__(self, root):
+
+    class Closures:
+        """
+        Decorator for Strategy Class
+        """
+        def plan_iterator(func):
+            """
+            Iterate all connected plan from root.
+            """
+            def wrapper(obj):
+                plan = obj.root
+                while(plan):
+                    func(obj, plan)
+                    plan = plan.next_plan
+            return wrapper
+
+    def __init__(self, root=None):
         self.root = Plan('root', URL=root)
 
-    def show_plan(self):
+    @Closures.plan_iterator
+    def show_plan(self, plan=None):
         """
         Show sequence of plan assigned to this strategy.
         """
-        plan = self.root
-        while(plan):
-            print(plan)
-            plan = plan.next_plan
+        print(plan)
+
+
+    @Closures.plan_iterator
+    def execute(self, plan=None):
+        """
+        Execute registered sequence of plan.
+        """
+        print(plan)
+
 
 class Plan:
     """

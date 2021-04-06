@@ -10,11 +10,11 @@ class Swimmer:
     """
     def __init__(self, path):
         self.validate = validate_swipy(path)
-        self.root, self.bucket, self.strategy = extract_swipy(path)
+        self.bucket, self.strategy = extract_swipy(path)
 
     def swim(self):
         """
         Start swimming from root.
         """
-        req = requests.get(self.root)
-        return req.status_code
+        self.strategy.execute()
+        return "Done"
