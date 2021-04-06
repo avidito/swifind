@@ -2,8 +2,10 @@ class Strategy:
     """
     Function sequence handler for each swimmer.
     """
+    def __init__(self):
+        self.root, self.tail = None, None
 
-    class Closures:
+    class Decorator:
         """
         Decorator for Strategy Class
         """
@@ -18,24 +20,35 @@ class Strategy:
                     plan = plan.next_plan
             return wrapper
 
-    def __init__(self, root=None):
-        self.root = Plan('root', URL=root)
+    # Extraction Method
+    def add_root_plan(self, url):
+        """
+        Adding root activity to plan.
+        """
+        self.root = Plan('root', url=url)
+        self.tail = self.root
 
-    @Closures.plan_iterator
+    def add_collect_plan(self, id, path):
+        """
+        Adding collect activity to plan.
+        """
+        p = Plan('collect', id=id, path=path)
+        self.tail.add_link(p)
+        self.tail = self.tail.next_plan
+
+    @Decorator.plan_iterator
     def show_plan(self, plan=None):
         """
         Show sequence of plan assigned to this strategy.
         """
         print(plan)
 
-
-    @Closures.plan_iterator
+    @Decorator.plan_iterator
     def execute(self, plan=None):
         """
         Execute registered sequence of plan.
         """
         print(plan)
-
 
 class Plan:
     """
@@ -49,7 +62,7 @@ class Plan:
 
     def __repr__(self):
         order = '[Not Assigned]' if (self.order is None) else f'Order {self.order}'
-        args = ' '.join((f'{key}={value}' for key, value in self.args.items()))
+        args = ', '.join((f'{key}={value}' for key, value in self.args.items()))
         return f'{order}: `{self.activity}`. {args}'
 
     def add_link(self, destination):
@@ -57,3 +70,4 @@ class Plan:
         Linking new next plan to this plan.
         """
         self.next_plan = destination
+        self.next_plan.order = self.order + 1
