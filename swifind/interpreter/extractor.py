@@ -1,18 +1,36 @@
-from .parser import parse_swipy
+import re
+
+from .parser import iterate_components
 from ..bucket import Bucket
 from ..strategy import Strategy
 
-def extract_root(component):
+def extract_root(strategy, args_raw, line_id):
     """
     Extracting root information.
     """
-    root = component.split(' ', 2)[1]
-    return root
+    [url] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
+    strategy.add_root_plan(url)
+    return strategy
 
-def extract_swipy(path):
+def extract_collect(strategy, args_raw, line_id):
     """
-    Extracting swipy script from path.
+    Extracting collect information.
     """
-    components = parse_swipy(path)
-    root = next(components)[2]
-    return root, Bucket(), Strategy()
+    [id, path] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
+    strategy.add_collect_plan(id, path)
+    return strategy
+
+EXTRACTORS = {
+    'ROOT': extract_root,
+    'COLLECT': extract_collect
+}
+
+# Extractor Functions
+@iterate_components
+def extract_swipy(components, strategy=Strategy()):
+    """
+    Extracting swipy components and load to strategy.
+    """
+    line_id, activity, arguments = next(components)
+    strategy = EXTRACTORS[activity](strategy, arguments, line_id)
+    return strategy
