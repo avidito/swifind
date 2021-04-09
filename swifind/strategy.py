@@ -5,7 +5,7 @@ class Strategy:
     def __init__(self):
         self.root, self.tail = None, None
 
-    class Decorator:
+    class Closure:
         """
         Decorator for Strategy Class
         """
@@ -13,7 +13,7 @@ class Strategy:
             """
             Iterate all connected plan from root.
             """
-            def wrapper(obj):
+            def wrapper(obj, plan):
                 plan = obj.origin
                 while(plan):
                     obj = func(obj, plan)
@@ -42,6 +42,8 @@ class Strategy:
         """
         Show sequence of plan assigned to this strategy.
         """
+        if (plan is None):
+            plan = self.root
         print(plan)
 
     @Decorator.plan_iterator
@@ -49,6 +51,8 @@ class Strategy:
         """
         Execute registered sequence of plan.
         """
+        if (plan is None):
+            plan = self.root
         print(plan)
 
 class Plan:
