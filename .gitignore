@@ -3,4 +3,4 @@ plan.txt
 dev/
 __pycache__/
 
-test*
+test.*
