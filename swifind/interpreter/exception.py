@@ -1,14 +1,14 @@
 # Validation Exception
-class SwipyValidationError(Exception):
+class SwiplValidationError(Exception):
     """
-    Raised when the syntax is violate swipy rule.
+    Raised when the syntax is violate swipl rule.
     """
     def __init__(self, message):
         super().__init__(message)
 
-class ArgumentsError(SwipyValidationError):
+class ArgumentsError(SwiplValidationError):
     """
-    Raised when activity arguments violate swipy rule.
+    Raised when activity arguments violate swipl rule.
     """
     def __init__(self, activity, line_id):
         self.activity = activity

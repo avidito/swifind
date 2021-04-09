@@ -1,6 +1,6 @@
 from swifind import Swimmer
 
-plan = 'example.swipy'
+plan = 'example.swipl'
 sw = Swimmer(plan)
 req = sw.swim()
 print(req)
