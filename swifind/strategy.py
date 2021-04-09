@@ -14,25 +14,26 @@ class Strategy:
             Iterate all connected plan from root.
             """
             def wrapper(obj):
-                plan = obj.root
+                plan = obj.origin
                 while(plan):
-                    func(obj, plan)
+                    obj = func(obj, plan)
                     plan = plan.next_plan
+                return obj
             return wrapper
 
     # Extraction Method
-    def add_root_plan(self, url):
+    def add_origin_plan(self, url):
         """
-        Adding root activity to plan.
+        Adding origin activity to plan.
         """
-        self.root = Plan('root', url=url)
-        self.tail = self.root
+        self.origin = Plan('origin', url=url)
+        self.tail = self.origin
 
-    def add_collect_plan(self, id, path):
+    def add_pick_plan(self, id, path):
         """
-        Adding collect activity to plan.
+        Adding pick activity to plan.
         """
-        p = Plan('collect', id=id, path=path)
+        p = Plan('pick', id=id, path=path)
         self.tail.add_link(p)
         self.tail = self.tail.next_plan
 
@@ -57,7 +58,7 @@ class Plan:
     def __init__(self, activity, **kwargs):
         self.activity = activity
         self.args = kwargs
-        self.order = None if (activity != 'root') else 0
+        self.order = None if (activity != 'origin') else 0
         self.next_plan = None
 
     def __repr__(self):

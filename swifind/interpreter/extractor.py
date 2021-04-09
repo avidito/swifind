@@ -4,30 +4,34 @@ from .parser import iterate_components
 from ..bucket import Bucket
 from ..strategy import Strategy
 
-def extract_root(strategy, args_raw, line_id):
-    """
-    Extracting root information.
-    """
+"""
+Validator Functions
+
+Function to extract each activity arguments. Each function use namespace 'extract_', followed by activity name.
+Available activity:
+- ORIGIN
+- PICK
+"""
+def extract_origin(strategy, args_raw, line_id):
     [url] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    strategy.add_root_plan(url)
+    strategy.add_origin_plan(url)
     return strategy
 
-def extract_collect(strategy, args_raw, line_id):
-    """
-    Extracting collect information.
-    """
+def extract_pick(strategy, args_raw, line_id):
     [id, path] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    strategy.add_collect_plan(id, path)
+    strategy.add_pick_plan(id, path)
     return strategy
 
+"""
+Extractor Mapper and Function.
+"""
 EXTRACTORS = {
-    'ROOT': extract_root,
-    'COLLECT': extract_collect
+    'ORIGIN': extract_origin,
+    'PICK': extract_pick
 }
 
-# Extractor Functions
 @iterate_components
-def extract_swipy(components, strategy=Strategy()):
+def extract_swipl(components, strategy=Strategy()):
     """
     Extracting swipy components and load to strategy.
     """

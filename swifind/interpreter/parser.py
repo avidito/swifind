@@ -7,9 +7,9 @@ def read_script(path):
     raw_components = ((line_id+1, line.strip()) for line_id, line in enumerate(raw.split('\n')) if (line != ''))
     return raw_components
 
-def parse_swipy(path):
+def parse_swipl(path):
     """
-    Parse swipy script to list of component.
+    Parse swipl script to list of component.
     """
     raw_components = read_script(path)
     components = ((line_id, *line.split(' ', 1)) if (line.count(' ')) else (line_id, line.strip(), None) for line_id, line in raw_components)
