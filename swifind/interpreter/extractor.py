@@ -1,7 +1,7 @@
 import re
 
 from .parser import iterate_components
-from ..bucket import Bucket
+from ..bag import Bag
 from ..strategy import Strategy
 
 """
