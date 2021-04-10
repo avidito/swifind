@@ -13,7 +13,7 @@ class Strategy:
             """
             Iterate all connected plan from root.
             """
-            def wrapper(obj, plan):
+            def wrapper(obj):
                 plan = obj.origin
                 while(plan):
                     obj = func(obj, plan)
@@ -37,7 +37,7 @@ class Strategy:
         self.tail.add_link(p)
         self.tail = self.tail.next_plan
 
-    @Decorator.plan_iterator
+    @Closure.plan_iterator
     def show_plan(self, plan=None):
         """
         Show sequence of plan assigned to this strategy.
@@ -46,7 +46,7 @@ class Strategy:
             plan = self.root
         print(plan)
 
-    @Decorator.plan_iterator
+    @Closure.plan_iterator
     def execute(self, plan=None):
         """
         Execute registered sequence of plan.
