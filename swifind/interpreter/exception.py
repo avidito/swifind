@@ -25,7 +25,7 @@ class ArgumentsError(SwiplValidationError):
         """
         Raised when there is too many arguments.
         """
-        message = f"'{self.activity}' activity takes {argument_need} arguments by {argument_given} were given at line {self.line_id}."
+        message = f"'{self.activity}' activity takes {argument_need} arguments, but {argument_given} were given at line {self.line_id}."
         super().__init__(message)
 
     def type(self, argument_type_error):

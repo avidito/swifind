@@ -39,7 +39,7 @@ def validate_pick(args_raw, line_id):
     elif(not args[0].isalnum()): args_error.type(argument_type_error=ARGUMENTS['PICK'][0])
     elif(not args[1].isprintable()): args_error.type(argument_type_error=ARGUMENTS['PICK'][1])
     else: return 'PICK', args
-
+    
     raise args_error
 
 """

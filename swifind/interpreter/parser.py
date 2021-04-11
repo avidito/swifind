@@ -4,7 +4,7 @@ def read_script(path):
     """
     with open(path, 'r') as f:
         raw = f.read().strip()
-    raw_components = ((id+1, line.strip()) for id, line in enumerate(raw.split('\n')) if (line))
+    raw_components = ((id+1, line.strip()) for id, line in enumerate(raw.split('\n')) if (line.strip()))
     return raw_components
 
 def parse_swipl(path):
@@ -13,7 +13,7 @@ def parse_swipl(path):
     """
     raw_components = read_script(path)
     components = ((line_id, *line.split(' ', 1)) for line_id, line in raw_components)
-    components_padded_args = ((line, *activity) if (len(activity) == 2) else (line, activity, '') for line, activity in components)
+    components_padded_args = ((line, *activity) if (len(activity) == 2) else (line, activity, '') for line, *activity in components)
     return components_padded_args
 
 def iterate_components(func):
