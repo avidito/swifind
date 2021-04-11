@@ -13,10 +13,22 @@ class TestValidateOrigin(object):
     def test_with_missing_arguments(self):
         with pytest.raises(ArgumentsError) as exception_info:
             validate_origin('', 1)
-            assert exception_info.match("'ORIGIN' activity missing required arguments: 'URL' at line 1.") 
+            assert exception_info.match("'ORIGIN' activity missing required arguments: 'URL' at line 1.")
 
 class TestValidatePick(object):
-    ... # Implement later
+    def test_with_valid_arguments(self):
+        assert validate_pick("title 'body > div > div.row.header-box > div.col-md-8 > h1 > a'", 10)
+        assert validate_pick("content 'body > div > p > a'", 10)
+        assert validate_pick("subtitle 'body > div > div.row.header-box > h2'", 10)
+
+    def test_with_missing_arguments(self):
+        with pytest.raises(ArgumentsError) as exception_info:
+            validate_pick('', 10)
+            assert exception_info.match("'PICK' activity missing required arguments: 'ID' at line 10.")
+
+        with pytest.raises(ArgumentsError) as exception_info:
+            validate_pick('quotes', 10)
+            assert exception_info.match("'PICK' activity missing required arguments: 'URL' at line 10.")
 
 class TestValidateSwipl(object):
     ... # Implement later
