@@ -22,7 +22,7 @@ def validate_origin(args_raw, line_id):
     elif(args_count > 1): args_error.over(argument_need=1, argument_given=args_count)
     # Argument Type
     elif(not args[0].isprintable()): args_error.type(argument_type_error=ARGUMENTS['origin'][0])
-    else: return
+    else: return 'origin', args
 
     raise args_error
 
@@ -37,7 +37,7 @@ def validate_pick(args_raw, line_id):
     # Argument Type
     elif(not args[0].isalnum()): args_error.type(argument_type_error=ARGUMENTS['pick'][0])
     elif(not args[1].isprintable()): args_error.type(argument_type_error=ARGUMENTS['pick'][1])
-    else: return
+    else: return 'pick', args
 
     raise arguments_error
 
@@ -54,11 +54,9 @@ ARGUMENTS = {
     'PICK': ('ID', 'PATH',)
 }
 
-@iterate_components
 def validate_swipl(components):
     """
     Validate swipy components.
     """
-    line_id, activity, arguments = next(components)
-    VALIDATORS[activity](arguments, line_id)
-    return True
+    valid_components = (VALIDATORS[activity](args, line) for line, activity, args in components)
+    return True, valid_components
