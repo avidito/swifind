@@ -8,8 +8,10 @@ class Catfish:
     Default Catfish class.
     """
     def __init__(self, path):
-        self.validate = validate_swipl(parse_swipl(path))
-        self.strategy = extract_swipl(parse_swipl(path))
+        self.validate, components = validate_swipl(parse_swipl(path))
+
+        components = parse_swipl(path) # Temporary
+        self.strategy = extract_swipl(components)
         self.bag = Bag()
 
     def swim(self):
@@ -17,7 +19,6 @@ class Catfish:
         Start swimming from origin.
         """
         self.strategy.execute()
-        print("Done")
 
     def unpack(self):
         """
