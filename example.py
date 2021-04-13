@@ -2,7 +2,8 @@ from swifind import Swimmer
 
 # Initiation
 plan = 'example.swipl'
-sw = Catfish(plan)
+sw = Catfish()
+sw.prepare(plan)
 
 # Swimming
 sw.swim()
