@@ -7,5 +7,5 @@ class TestCatfishInitiation(object):
     Test class for Catfish object initiation.
     """
     def test_object_type(self):
-        catfish = Catfish('_dummy/dummy.swipl')
+        catfish = Catfish()
         assert isinstance(catfish, Catfish)

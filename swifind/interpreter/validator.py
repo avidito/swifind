@@ -14,32 +14,33 @@ Available activity:
 def validate_origin(args_raw, line_id):
     # Parse arguments
     args = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    args_error = ArgumentsError('origin', line_id)
+    args_error = ArgumentsError('ORIGIN', line_id)
     args_count = len(args)
 
     # Argument Count
-    if (args_count < 1): args_error.missing(argument_missing=ARGUMENTS['origin'][args_count])
+    if (args_count < 1): args_error.missing(argument_missing=ARGUMENTS['ORIGIN'][args_count])
     elif(args_count > 1): args_error.over(argument_need=1, argument_given=args_count)
     # Argument Type
-    elif(not args[0].isprintable()): args_error.type(argument_type_error=ARGUMENTS['origin'][0])
-    else: return
+    elif(not args[0].isprintable()): args_error.type(argument_type_error=ARGUMENTS['ORIGIN'][0])
+    else:
+        return 'ORIGIN', args, line_id
 
     raise args_error
 
 def validate_pick(args_raw, line_id):
     args = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    args_error = ArgumentsError('pick', line_id)
+    args_error = ArgumentsError('PICK', line_id)
     args_count = len(args)
 
     # Argument Count
-    if (args_count < 2): args_error.missing(argument_missing=ARGUMENTS['pick'][args_count])
+    if (args_count < 2): args_error.missing(argument_missing=ARGUMENTS['PICK'][args_count])
     elif(args_count > 2): args_error.over(argument_need=2, argument_given=args_count)
     # Argument Type
-    elif(not args[0].isalnum()): args_error.type(argument_type_error=ARGUMENTS['pick'][0])
-    elif(not args[1].isprintable()): args_error.type(argument_type_error=ARGUMENTS['pick'][1])
-    else: return
+    elif(not args[0].isalnum()): args_error.type(argument_type_error=ARGUMENTS['PICK'][0])
+    elif(not args[1].isprintable()): args_error.type(argument_type_error=ARGUMENTS['PICK'][1])
+    else: return 'PICK', args, line_id
 
-    raise arguments_error
+    raise args_error
 
 """
 Validator Mapper and Function.
@@ -54,11 +55,9 @@ ARGUMENTS = {
     'PICK': ('ID', 'PATH',)
 }
 
-@iterate_components
 def validate_swipl(components):
     """
     Validate swipy components.
     """
-    line_id, activity, arguments = next(components)
-    VALIDATORS[activity](arguments, line_id)
-    return True
+    valid_components = [VALIDATORS[activity](args, line) for line, activity, args in components]
+    return True, valid_components
