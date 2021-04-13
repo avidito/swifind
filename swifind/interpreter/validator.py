@@ -23,7 +23,7 @@ def validate_origin(args_raw, line_id):
     # Argument Type
     elif(not args[0].isprintable()): args_error.type(argument_type_error=ARGUMENTS['ORIGIN'][0])
     else:
-        return 'ORIGIN', args
+        return 'ORIGIN', args, line_id
 
     raise args_error
 
@@ -38,8 +38,8 @@ def validate_pick(args_raw, line_id):
     # Argument Type
     elif(not args[0].isalnum()): args_error.type(argument_type_error=ARGUMENTS['PICK'][0])
     elif(not args[1].isprintable()): args_error.type(argument_type_error=ARGUMENTS['PICK'][1])
-    else: return 'PICK', args
-    
+    else: return 'PICK', args, line_id
+
     raise args_error
 
 """

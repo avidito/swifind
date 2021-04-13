@@ -1,6 +1,10 @@
+import os
 import pytest
 
+from tests.constant import VALIDATE_SWIPL_PATH
+
 from swifind.interpreter.exception import ArgumentsError
+from swifind.interpreter.parser import parse_swipl
 from swifind.interpreter.validator import (validate_origin,
                                            validate_pick,
                                            validate_swipl)
@@ -68,4 +72,24 @@ class TestValidatePick(object):
             validate_pick("abc 'body > h1 \b> a'", 10)
 
 class TestValidateSwipl(object):
-    ... # Implement later
+    def test_return_values_datatype(self):
+        path = os.path.join(VALIDATE_SWIPL_PATH, 'valid_components_ex1.swipl')
+        [flag, components] = validate_swipl(parse_swipl(path))
+        assert (isinstance(flag, bool)) and (type(flag) != int)
+        assert (isinstance(components, list))
+        for component in components:
+            assert isinstance(component, tuple)
+
+    def test_with_valid_components(self):
+        path = os.path.join(VALIDATE_SWIPL_PATH, 'valid_components_ex1.swipl')
+        result = validate_swipl(parse_swipl(path))
+        expected = (True, [('ORIGIN', ['https://quotes.toscrape.com/'], 1),
+                           ('PICK', ['title', "'body > div > div.row.header-box > div.col-md-8 > h1 > a'"], 3),
+                           ('PICK', ['header', "'body > div > div.row.header-box'"], 4)])
+        assert result == expected
+
+    def test_with_invalid_components(self):
+        path = os.path.join(VALIDATE_SWIPL_PATH, 'invalid_components_ex1.swipl')
+        msg = "'ORIGIN' activity missing required arguments: 'URL' at line 1."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_swipl(parse_swipl(path))
