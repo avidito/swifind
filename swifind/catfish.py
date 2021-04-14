@@ -21,13 +21,13 @@ class Catfish:
         self.validate, components = validate_swipl(parse_swipl(path))
 
         components = parse_swipl(path) # Temporary
-        self.strategy = extract_swipl(components)
+        self.strategy = extract_swipl(self.strategy, components)
 
     def swim(self):
         """
         Start swimming.
         """
-        print("Swimming") # Temporary
+        self.strategy.show_plan()
 
     def unpack(self):
         """

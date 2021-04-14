@@ -2,7 +2,6 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .parser import iterate_components
 from ..bag import Bag
 from ..strategy import Strategy
 
@@ -45,11 +44,12 @@ EXTRACTORS = {
     'PICK': extract_pick
 }
 
-@iterate_components
-def extract_swipl(components):
+def extract_swipl(strategy, components):
     """
-    Extracting swipy components and load to strategy.
+    Extracting swipl components and load to strategy.
     """
-    line_id, activity, arguments = next(components)
-    strategy = EXTRACTORS[activity](arguments, line_id)
-    return "OK" # Temporary
+    for component in components:
+        line, plan, args_raw = component
+        activity = EXTRACTORS[plan](args_raw, line)
+        strategy.add_activity(plan, activity)
+    return strategy

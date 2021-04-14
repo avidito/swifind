@@ -5,70 +5,41 @@ class Strategy:
     def __init__(self):
         self.root, self.tail = None, None
 
-    class Closure:
+    def add_activity(self, label, func):
         """
-        Decorator for Strategy Class
+        Adding activity to strategy plans.
         """
-        def plan_iterator(func):
-            """
-            Iterate all connected plan from root.
-            """
-            def wrapper(obj):
-                plan = obj.origin
-                while(plan):
-                    obj = func(obj, plan)
-                    plan = plan.next_plan
-                return obj
-            return wrapper
+        activity_plan = Plan(label, func)
+        if (self.root is None):
+            self.root = activity_plan
+            self.tail = activity_plan
+        else:
+            self.tail.add_link(activity_plan)
+            self.tail = self.tail.next_plan
 
-    # Extraction Method
-    def add_origin_plan(self, url):
-        """
-        Adding origin activity to plan.
-        """
-        self.origin = Plan('origin', url=url)
-        self.tail = self.origin
-
-    def add_pick_plan(self, id, path):
-        """
-        Adding pick activity to plan.
-        """
-        p = Plan('pick', id=id, path=path)
-        self.tail.add_link(p)
-        self.tail = self.tail.next_plan
-
-    @Closure.plan_iterator
-    def show_plan(self, plan=None):
+    def show_plan(self):
         """
         Show sequence of plan assigned to this strategy.
         """
-        if (plan is None):
-            plan = self.root
-        print(plan)
-
-    @Closure.plan_iterator
-    def execute(self, plan=None):
-        """
-        Execute registered sequence of plan.
-        """
-        if (plan is None):
-            plan = self.root
-        print(plan)
+        plan = self.root
+        print("START\n|")
+        while(plan):
+            print(f"{plan}\n|")
+            plan = plan.next_plan
+        print("END")
 
 class Plan:
     """
     Object that represent one activity.
     """
-    def __init__(self, activity, **kwargs):
+    def __init__(self, activity, func):
         self.activity = activity
-        self.args = kwargs
-        self.order = None if (activity != 'origin') else 0
+        self.order = None if (activity != 'ORIGIN') else 0
         self.next_plan = None
 
     def __repr__(self):
-        order = '[Not Assigned]' if (self.order is None) else f'Order {self.order}'
-        args = ', '.join((f'{key}={value}' for key, value in self.args.items()))
-        return f'{order}: `{self.activity}`. {args}'
+        order = '[Not Assigned]' if (self.order is None) else f'{self.order}'
+        return f'A{order}: `{self.activity}`'
 
     def add_link(self, destination):
         """
