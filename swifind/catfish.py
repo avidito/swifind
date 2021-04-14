@@ -27,10 +27,10 @@ class Catfish:
         """
         Start swimming.
         """
-        self.strategy.execute()
+        print("Swimming") # Temporary
 
     def unpack(self):
         """
         Unpack Bag content.
         """
-        return self.bag.get_all()
+        return {"testing_key":"testing_result"}
