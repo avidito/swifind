@@ -13,26 +13,26 @@ Available activity:
 - ORIGIN
 - PICK
 """
-def extract_origin(args_raw, line_id):
+def extract_origin(args_raw, line):
     [url] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
 
-    def activity(strategy, bag):
+    def activity(catfish):
         """
         Get origin page and assign it to strategy.
         """
         req = requests.get(url)
         view = BeautifulSoup(req.content, 'html.parser')
 
-        strategy.assign_view(view)
-        bag.log_activity('ORIGIN', 1, line_id)
+        catfish._assign_view(view)
+        catfish.bag.log_activity('ORIGIN', 1, line)
         return req.status_code # Temporary
 
     return activity
 
-def extract_pick(args_raw, line_id):
+def extract_pick(args_raw, line):
     [id, path] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
 
-    def activity(strategy, bag):
+    def activity(catfish):
         return True # Temporary
     return activity
 

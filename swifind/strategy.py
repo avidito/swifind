@@ -17,6 +17,15 @@ class Strategy:
             self.tail.add_link(activity_plan)
             self.tail = self.tail.next_plan
 
+    def get_activity(self):
+        """
+        Move plan pointer and return activity.
+        """
+        plan_pointer = self.root
+        while(plan_pointer):
+            yield plan_pointer
+            plan_pointer = plan_pointer.next_plan
+
     def show_plan(self):
         """
         Show sequence of plan assigned to this strategy.
@@ -34,6 +43,7 @@ class Plan:
     """
     def __init__(self, activity, func):
         self.activity = activity
+        self.func = func
         self.order = None if (activity != 'ORIGIN') else 0
         self.next_plan = None
 

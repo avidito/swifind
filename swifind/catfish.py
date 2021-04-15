@@ -27,10 +27,20 @@ class Catfish:
         """
         Start swimming.
         """
-        self.strategy.show_plan()
+        self.bag.log_swimming('start')
+        for pointer in self.strategy.get_activity():
+            result = pointer.func(self)
+            print(result)
+        self.bag.log_swimming('start')
 
     def unpack(self):
         """
         Unpack Bag content.
         """
         return {"testing_key":"testing_result"}
+
+    def _assign_view(self, view):
+        """
+        Change catfish active pageview.
+        """
+        self.view = view
