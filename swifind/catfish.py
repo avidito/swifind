@@ -11,6 +11,7 @@ class Catfish:
     """
     def __init__(self):
         self.validate = False
+        self.view = None
         self.strategy = Strategy()
         self.bag = Bag()
 
@@ -27,18 +28,11 @@ class Catfish:
         """
         self.bag.log_swimming('start')
         for pointer in self.strategy.get_activity():
-            result = pointer.func(self)
-            print(result)
+            pointer.func(self)
         self.bag.log_swimming('start')
 
     def unpack(self):
         """
         Unpack Bag content.
         """
-        return self.bag.data
-
-    def _assign_view(self, view):
-        """
-        Change catfish active pageview.
-        """
-        self.view = view
+        return self.bag.data # Temporary

@@ -23,7 +23,6 @@ def extract_origin(args_raw, line):
         req = requests.get(url)
         catfish.view = BeautifulSoup(req.content, 'lxml')
         catfish.bag.log_activity('ORIGIN', line)
-        return req.status_code # Temporary
 
     return activity
 
@@ -38,7 +37,7 @@ def extract_pick(args_raw, line):
 
         catfish.bag.add_item(id, content)
         catfish.bag.log_activity('PICK', line)
-        return content # Temporary
+        
     return activity
 
 """

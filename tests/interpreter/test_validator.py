@@ -30,7 +30,7 @@ class TestValidateOrigin(object):
             validate_origin('https://www.test.com testing dot com', 1)
 
     def test_with_invalid_data_type(self):
-        msg = "`URL` from `ORIGIN` activity is violates swipy rule at line 1."
+        msg = "'URL' from 'ORIGIN' activity violates swipl rule at line 1."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_origin("http:\b//www.com", 1)
 
@@ -63,11 +63,11 @@ class TestValidatePick(object):
             validate_pick("title 'body > div > 'h1' > a'", 10)
 
     def test_with_invalid_data_type(self):
-        msg = "`ID` from `PICK` activity is violates swipy rule at line 10."
+        msg = "'ID' from 'PICK' activity violates swipl rule at line 10."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_pick("?!?! 'body > h1 > a'", 10)
 
-        msg = "`PATH` from `PICK` activity is violates swipy rule at line 10."
+        msg = "'PATH' from 'PICK' activity violates swipl rule at line 10."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_pick("abc 'body > h1 \b> a'", 10)
 
