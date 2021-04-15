@@ -14,7 +14,7 @@ Available activity:
 - PICK
 """
 def extract_origin(args_raw, line):
-    [url] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
+    [url] = args_raw
 
     def activity(catfish):
         """
@@ -30,7 +30,7 @@ def extract_origin(args_raw, line):
     return activity
 
 def extract_pick(args_raw, line):
-    [id, path] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
+    [id, path] = args_raw
 
     def activity(catfish):
         return True # Temporary
@@ -49,7 +49,7 @@ def extract_swipl(strategy, components):
     Extracting swipl components and load to strategy.
     """
     for component in components:
-        line, plan, args_raw = component
+        plan, args_raw, line = component
         activity = EXTRACTORS[plan](args_raw, line)
         strategy.add_activity(plan, activity)
     return strategy

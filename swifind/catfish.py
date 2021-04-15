@@ -19,8 +19,6 @@ class Catfish:
         Initiate swiming strategy from swipl script.
         """
         self.validate, components = validate_swipl(parse_swipl(path))
-
-        components = parse_swipl(path) # Temporary
         self.strategy = extract_swipl(self.strategy, components)
 
     def swim(self):
