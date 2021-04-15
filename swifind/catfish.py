@@ -35,7 +35,7 @@ class Catfish:
         """
         Unpack Bag content.
         """
-        return {"testing_key":"testing_result"}
+        return self.bag.data
 
     def _assign_view(self, view):
         """

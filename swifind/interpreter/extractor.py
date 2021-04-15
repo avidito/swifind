@@ -21,19 +21,24 @@ def extract_origin(args_raw, line):
         Get origin page and assign it to strategy.
         """
         req = requests.get(url)
-        view = BeautifulSoup(req.content, 'html.parser')
-
-        catfish._assign_view(view)
-        catfish.bag.log_activity('ORIGIN', 1, line)
+        catfish.view = BeautifulSoup(req.content, 'lxml')
+        catfish.bag.log_activity('ORIGIN', line)
         return req.status_code # Temporary
 
     return activity
 
 def extract_pick(args_raw, line):
     [id, path] = args_raw
+    path = path.strip("'")
 
     def activity(catfish):
-        return True # Temporary
+        content = catfish.view
+        for tag in path.split(' '):
+            content = getattr(content, tag)
+
+        catfish.bag.add_item(id, content)
+        catfish.bag.log_activity('PICK', line)
+        return content # Temporary
     return activity
 
 """
