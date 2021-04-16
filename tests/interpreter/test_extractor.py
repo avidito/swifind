@@ -3,6 +3,7 @@ import types
 from bs4 import BeautifulSoup
 
 from swifind.catfish import Catfish
+from swifind.strategy import Strategy, Plan
 from swifind.interpreter.extractor import (extract_origin,
                                            extract_pick,
                                            extract_swipl)
@@ -69,11 +70,12 @@ class TestExtractPick(object):
         assert expected_log == result_log
 
 class TestExtractSwipl(object):
-    def test_with_return_values_datatype(self):
-        ... # Implement later
-
-    def test_with_valid_components(self):
-        ... # Implement later
-
-    def test_with_invalid_components(self):
-        ... # Implement later
+    def test_with_return_values(self):
+        strategy_test = Strategy()
+        components_test = [
+                    ['ORIGIN', ['http://www.testing.com'], 1],
+                ]
+        result = extract_swipl(strategy_test, components_test)
+        assert isinstance(result, Strategy)
+        assert result.root is not None
+        assert result.tail is not None
