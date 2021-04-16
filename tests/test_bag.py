@@ -1,6 +1,6 @@
 import pytest
 
-from swifind.bucket import Bag
+from swifind.bag import Bag
 
 class TestBag(object):
     ... # Implement later
