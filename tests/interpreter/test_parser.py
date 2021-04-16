@@ -4,7 +4,18 @@ from swifind.interpreter.parser import (read_script,
                                         parse_swipl)
 
 class TestReadScript(object):
-    ... # Implement later
+    def test_with_valid_script(self):
+        ... # Implement later
+
+    def test_with_no_argument_activity(self):
+        ... # Implement later
+
+    def test_with_invalid_activity_definition(self):
+        ... # Implement later
 
 class TestParseSwipl(object):
-    ... # Implement later
+    def test_with_valid_script(self):
+        ... # Implement later
+
+    def test_with_no_argument_activity(self):
+        ... # Implement later
