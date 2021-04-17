@@ -19,23 +19,25 @@ class Bag:
         self.data = {}
         return result
 
-    def log_swimming(self, mode):
+    def add_log(self, mode, *args, **kwargs):
+        """
+        Add log of activity or journey to bag.
+        """
         timestamp = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        self.logs['swimming'][f'{mode}_time'] = timestamp
-
-    def log_activity(self, activity, line, status='PASS'):
-        """
-        Logging status of activity.
-        """
-        log = {
-            'activity': activity,
-            'order': self.logs['swimming']['counter'],
-            'line': line,
-            'status': status,
-            'timestamp': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        }
-        self.logs['activity'].append(log)
-        self.logs['swimming']['counter'] += 1
+        if mode in ('start', 'end', 'unpack'):
+            self.logs['swimming'][f'{mode}_time'] = timestamp
+        else:
+            [line] = args
+            status = kwargs.get('status')
+            log = {
+                'activity': mode,
+                'order': self.logs['swimming']['counter'],
+                'line': line,
+                'status': status if (status) else 'PASS',
+                'timestamp': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            }
+            self.logs['activity'].append(log)
+            self.logs['swimming']['counter'] += 1
 
     def add_item(self, id, content):
         """
