@@ -11,6 +11,7 @@ class Catfish:
     """
     def __init__(self):
         self.validate = False
+        self.view = None
         self.strategy = Strategy()
         self.bag = Bag()
 
@@ -19,18 +20,19 @@ class Catfish:
         Initiate swiming strategy from swipl script.
         """
         self.validate, components = validate_swipl(parse_swipl(path))
-
-        components = parse_swipl(path) # Temporary
-        self.strategy = extract_swipl(components)
+        self.strategy = extract_swipl(self.strategy, components)
 
     def swim(self):
         """
         Start swimming.
         """
-        self.strategy.execute()
+        self.bag.log_swimming('start')
+        for pointer in self.strategy.get_activity():
+            pointer.func(self)
+        self.bag.log_swimming('start')
 
     def unpack(self):
         """
         Unpack Bag content.
         """
-        return self.bag.get_all()
+        return self.bag.data # Temporary

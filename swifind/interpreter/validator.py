@@ -1,6 +1,5 @@
 import re
 
-from .parser import iterate_components
 from .exception import ArgumentsError
 
 """
