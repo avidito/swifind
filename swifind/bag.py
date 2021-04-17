@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from swifind.constant import ALL_ACTIVITY
+
 class Bag:
     """
     Data container to hold collected data from web-scraping.
@@ -26,7 +28,7 @@ class Bag:
         timestamp = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         if mode in ('start', 'end', 'unpack'):
             self.logs['swimming'][f'{mode}_time'] = timestamp
-        else:
+        elif mode in ALL_ACTIVITY:
             [line] = args
             status = kwargs.get('status')
             log = {
