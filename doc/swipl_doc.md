@@ -6,7 +6,7 @@ Any plan (`swipl` script) must follow this structure:
 ## Activity
 Activity is `swipl` command or function. It will be validated and translated to Python function sequence. Some activity need arguments. Activity and each arguments separated with one whitespace. Below are the list of activity in `swipl`:
 
-### `ROOT`
+### `ORIGIN`
 `origin` is command to tell `Catfish` where is the starting point. `origin` must be placed
 at the first line of each plan.
 
