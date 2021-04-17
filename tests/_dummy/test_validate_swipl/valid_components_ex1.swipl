@@ -1,0 +1,4 @@
+ORIGIN https://quotes.toscrape.com/
+
+PICK title 'h1 a text'
+PICK header 'div div row header-box'

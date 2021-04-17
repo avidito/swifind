@@ -1,26 +1,44 @@
 import re
+import requests
+from bs4 import BeautifulSoup
 
-from .parser import iterate_components
-from ..bucket import Bucket
+from ..bag import Bag
 from ..strategy import Strategy
 
 """
 Validator Functions
 
-Function to extract each activity arguments. Each function use namespace 'extract_', followed by activity name.
+Factory function that extract each activity arguments and create activity function. Each function use namespace 'extract_', followed by activity name.
 Available activity:
 - ORIGIN
 - PICK
 """
-def extract_origin(strategy, args_raw, line_id):
-    [url] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    strategy.add_origin_plan(url)
-    return strategy
+def extract_origin(args_raw, line):
+    [url] = args_raw
 
-def extract_pick(strategy, args_raw, line_id):
-    [id, path] = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
-    strategy.add_pick_plan(id, path)
-    return strategy
+    def activity(catfish):
+        """
+        Get origin page and assign it to strategy.
+        """
+        req = requests.get(url)
+        catfish.view = BeautifulSoup(req.content, 'lxml')
+        catfish.bag.log_activity('ORIGIN', line)
+
+    return activity
+
+def extract_pick(args_raw, line):
+    [id, path] = args_raw
+    path = path.strip("'")
+
+    def activity(catfish):
+        content = catfish.view
+        for tag in path.split(' '):
+            content = getattr(content, tag)
+
+        catfish.bag.add_item(id, content)
+        catfish.bag.log_activity('PICK', line)
+        
+    return activity
 
 """
 Extractor Mapper and Function.
@@ -30,11 +48,12 @@ EXTRACTORS = {
     'PICK': extract_pick
 }
 
-@iterate_components
-def extract_swipl(components, strategy=Strategy()):
+def extract_swipl(strategy, components):
     """
-    Extracting swipy components and load to strategy.
+    Extracting swipl components and load to strategy.
     """
-    line_id, activity, arguments = next(components)
-    strategy = EXTRACTORS[activity](strategy, arguments, line_id)
+    for component in components:
+        plan, args_raw, line = component
+        activity = EXTRACTORS[plan](args_raw, line)
+        strategy.add_activity(plan, activity)
     return strategy
