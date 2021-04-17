@@ -27,6 +27,3 @@ class TestBagAddLog(object):
         bag_test = Bag()
         bag_test.add_log('ORIGIN', 1)
         assert bag_test.logs['activity']
-
-    def test_invalid_add_logs(self):
-        ... # Implement later
