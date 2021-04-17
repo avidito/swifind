@@ -77,6 +77,7 @@ class TestValidateSwipl(object):
         [flag, components] = validate_swipl(parse_swipl(path))
         assert (isinstance(flag, bool)) and (type(flag) != int)
         assert (isinstance(components, list))
+
         for component in components:
             assert isinstance(component, tuple)
 
