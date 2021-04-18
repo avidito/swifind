@@ -57,4 +57,4 @@ class TestCatfishSwim(object):
             {'activity': 'PICK', 'order': 2, 'line': 3, 'status':'PASS'}
         ]
         result_activity_logs = [{k:log[k] for k in log if k not in ('timestamp')} for log in catfish_test.bag.logs['activity']]
-        assert expected_activity_logs == expected_activity_logs
+        assert result_activity_logs == expected_activity_logs

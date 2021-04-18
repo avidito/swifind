@@ -12,18 +12,22 @@ class TestBagInitiation(object):
             'swimming': {'counter': 0},
             'activity': []
         }
-        assert bag_test.logs == expected_logs
+        result_logs = bag_test.logs
+        assert result_logs == expected_logs
 
 class TestBagAddLog(object):
     def test_add_journey_logs(self):
         bag_test = Bag()
         bag_test.add_log('start')
-        assert bag_test.logs['swimming'].get('start_time') is not None
+        bag_test_start_time = bag_test.logs['swimming'].get('start_time')
+        assert bag_test_start_time is not None
 
         bag_test.add_log('end')
-        assert bag_test.logs['swimming'].get('end_time') is not None
+        bag_test_end_time = bag_test.logs['swimming'].get('end_time')
+        assert bag_test_end_time is not None
 
     def test_add_activity_logs(self):
         bag_test = Bag()
         bag_test.add_log('ORIGIN', 1)
+        
         assert bag_test.logs['activity']

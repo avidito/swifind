@@ -58,6 +58,32 @@ class TestStrategyGetActivity(object):
         with pytest.raises(StopIteration) as exception_info:
             next_result = next(plan_sequences)
 
+class TestStrategyShowPlan(object):
+    def test_with_valid_sequence(self, capsys):
+        strategy_test = Strategy()
+        strategy_test.add_activity('ORIGIN', lambda x: x)
+        strategy_test.add_activity('PICK', lambda x: x)
+        strategy_test.add_activity('PICK', lambda x: x)
+
+        expected_plans = ("START\n|\n"
+                          "A0: `ORIGIN`\n|\n"
+                          "A1: `PICK`\n|\n"
+                          "A2: `PICK`\n|\n"
+                          "END\n")
+        strategy_test.show_plan()
+        captured = capsys.readouterr()
+        result_plans = captured.out
+        assert result_plans == expected_plans
+
+    def test_with_empty_sequence(self, capsys):
+        strategy_test = Strategy()
+        expected_plans = ("START\n|\n"
+                          "END\n")
+        strategy_test.show_plan()
+        captured = capsys.readouterr()
+        result_plans = captured.out
+        assert result_plans == expected_plans
+
 class TestPlanInitiation(object):
     def test_object_type(self):
         plan_test = Plan('ORIGIN', lambda x: x)
