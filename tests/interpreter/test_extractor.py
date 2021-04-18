@@ -2,6 +2,8 @@ import pytest
 import types
 from bs4 import BeautifulSoup
 
+from tests.constant import DUMMY_SWIPL
+
 from swifind.catfish import Catfish
 from swifind.strategy import Strategy, Plan
 from swifind.interpreter.extractor import (extract_origin,
@@ -22,7 +24,7 @@ class TestExtractOrigin(object):
         assert vars_results == vars_expected
 
     def test_with_valid_arguments(self):
-        catfish_test = Catfish()
+        catfish_test = Catfish(DUMMY_SWIPL)
         func = extract_origin(['https://quotes.toscrape.com/'], 1)
         func(catfish_test)
 
@@ -53,7 +55,7 @@ class TestExtractPick(object):
         assert vars_results == vars_expected
 
     def test_with_valid_arguments(self):
-        catfish_test = Catfish()
+        catfish_test = Catfish(DUMMY_SWIPL)
         extract_origin(['https://quotes.toscrape.com/'], 1)(catfish_test)
         func = extract_pick(['title', "'h1 a text'"], 10)
         func(catfish_test)

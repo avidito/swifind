@@ -74,8 +74,7 @@ class TestValidatePick(object):
 class TestValidateSwipl(object):
     def test_return_values_datatype(self):
         path = os.path.join(VALIDATE_SWIPL_PATH, 'valid_components_ex1.swipl')
-        [flag, components] = validate_swipl(parse_swipl(path))
-        assert (isinstance(flag, bool)) and (type(flag) != int)
+        components = validate_swipl(parse_swipl(path))
         assert (isinstance(components, list))
 
         for component in components:
@@ -84,9 +83,9 @@ class TestValidateSwipl(object):
     def test_with_valid_components(self):
         path = os.path.join(VALIDATE_SWIPL_PATH, 'valid_components_ex1.swipl')
         result_components = validate_swipl(parse_swipl(path))
-        expected_components = (True, [('ORIGIN', ['https://quotes.toscrape.com/'], 1),
-                                      ('PICK', ['title', "'h1 a text'"], 3),
-                                      ('PICK', ['header', "'div div row header-box'"], 4)])
+        expected_components = [('ORIGIN', ['https://quotes.toscrape.com/'], 1),
+                               ('PICK', ['title', "'h1 a text'"], 3),
+                               ('PICK', ['header', "'div div row header-box'"], 4)]
         assert result_components == expected_components
 
     def test_with_invalid_components(self):

@@ -59,4 +59,4 @@ def validate_swipl(components):
     Validate swipy components.
     """
     valid_components = [VALIDATORS[activity](args, line) for line, activity, args in components]
-    return True, valid_components
+    return valid_components

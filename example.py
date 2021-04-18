@@ -1,13 +1,13 @@
-from swifind import Swimmer
+import json
+from swifind.catfish import Catfish
 
 # Initiation
-plan = 'example.swipl'
-sw = Catfish()
-sw.prepare(plan)
+path = 'exampl.swipl'
+cf = Catfish(path)
 
 # Swimming
-sw.swim()
+cf.swim()
 
-# Unpacking
-result = sw.unpack()
+# Retrieve
+result = cf.unpack()
 print(f"\nResult:\n{json.dumps(result, indent=4)}")

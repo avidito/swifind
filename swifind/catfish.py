@@ -9,10 +9,10 @@ class Catfish:
     """
     Default Catfish class.
     """
-    def __init__(self):
-        self.validate = False
-        self.view = None
-        self.strategy = Strategy()
+    def __init__(self, path):
+        strategy = Strategy()
+        components = validate_swipl(parse_swipl(path))
+        self.strategy = extract_swipl(strategy, components)
         self.bag = Bag()
 
     class Closure(object):
@@ -31,13 +31,6 @@ class Catfish:
                 catfish.bag.add_log('end')
 
             return wrapper
-
-    def prepare(self, path):
-        """
-        Initiate swiming strategy from swipl script.
-        """
-        self.validate, components = validate_swipl(parse_swipl(path))
-        self.strategy = extract_swipl(self.strategy, components)
 
     @Closure.log_wrapper
     def swim(self):
