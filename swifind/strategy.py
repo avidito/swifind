@@ -48,8 +48,8 @@ class Plan:
         self.next_plan = None
 
     def __repr__(self):
-        order = '[Not Assigned]' if (self.order is None) else f'{self.order}'
-        return f'A{order}: `{self.activity}`'
+        order = '[Not Assigned]' if (self.order is None) else f'A{self.order}'
+        return f'{order}: `{self.activity}`'
 
     def add_link(self, destination):
         """

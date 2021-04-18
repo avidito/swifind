@@ -100,6 +100,29 @@ class TestPlanInitiation(object):
         assert plan_test.order is None
         assert plan_test.next_plan is None
 
+    def test_object_representation(self, capsys):
+        plan_test = Plan('ORIGIN', lambda x: x)
+        print(plan_test)
+        expected_print = "A0: `ORIGIN`\n"
+        captured = capsys.readouterr()
+        result_print = captured.out
+        assert result_print == expected_print
+
+        plan_test_extra = Plan('PICK', lambda x: x)
+        plan_test.add_link(plan_test_extra)
+        print(plan_test_extra)
+        expected_print = "A1: `PICK`\n"
+        captured = capsys.readouterr()
+        result_print = captured.out
+        assert result_print == expected_print
+
+        plan_test = Plan('PICK', lambda x: x)
+        print(plan_test)
+        expected_print = "[Not Assigned]: `PICK`\n"
+        captured = capsys.readouterr()
+        result_print = captured.out
+        assert result_print == expected_print
+
 class TestPlanAddLink(object):
     def test_add_valid_plan(self):
         plan_test_src = Plan('ORIGIN', lambda x: x)
