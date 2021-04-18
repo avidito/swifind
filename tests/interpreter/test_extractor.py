@@ -19,23 +19,25 @@ class TestExtractOrigin(object):
 
         vars_results = [var.cell_contents for var in func.__closure__]
         vars_expected = [1, 'https://quotes.toscrape.com/',]
-        assert vars_expected == vars_results
+        assert vars_results == vars_expected
 
     def test_with_valid_arguments(self):
         catfish_test = Catfish()
         func = extract_origin(['https://quotes.toscrape.com/'], 1)
         func(catfish_test)
-        assert catfish_test.view is not None
-        assert isinstance(catfish_test.view, BeautifulSoup)
 
+        catfish_test_view = catfish_test.view
+        assert catfish_test_view is not None
+        assert isinstance(catfish_test_view, BeautifulSoup)
+
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][0].items() if (k != 'timestamp')}
         expected_log = {
             'activity': 'ORIGIN',
             'order': 0,
             'line': 1,
             'status': 'PASS',
         }
-        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][0].items() if (k != 'timestamp')}
-        assert expected_log == result_log
+        assert result_log == expected_log
 
 class TestExtractPick(object):
     def test_return_value_type(self):
@@ -48,7 +50,7 @@ class TestExtractPick(object):
 
         vars_results = [var.cell_contents for var in func.__closure__]
         vars_expected = ['title', 10, 'h1 a text']
-        assert vars_expected == vars_results
+        assert vars_results == vars_expected
 
     def test_with_valid_arguments(self):
         catfish_test = Catfish()
@@ -56,18 +58,18 @@ class TestExtractPick(object):
         func = extract_pick(['title', "'h1 a text'"], 10)
         func(catfish_test)
 
-        result = catfish_test.bag.data.get('title', None)
-        assert result is not None
-        assert result == 'Quotes to Scrape'
+        result_data = catfish_test.bag.data.get('title', None)
+        expected_data = 'Quotes to Scrape'
+        assert result_data == expected_data
 
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
         expected_log = {
             'activity': 'PICK',
             'order': 1,
             'line': 10,
             'status': 'PASS',
         }
-        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
-        assert expected_log == result_log
+        assert result_log == expected_log
 
 class TestExtractSwipl(object):
     def test_with_return_values(self):
