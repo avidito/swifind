@@ -35,6 +35,29 @@ class TestStrategyAddActivity(object):
             p += 1
             pointer = pointer.next_plan
 
+class TestStrategyGetActivity(object):
+    def test_with_valid_sequence(self):
+        strategy_test = Strategy()
+        strategy_test.add_activity('ORIGIN', lambda x: x)
+        strategy_test.add_activity('PICK', lambda x: x)
+        strategy_test.add_activity('PICK', lambda x: x)
+        plan_sequences = strategy_test.get_activity()
+        assert isinstance(plan_sequences, types.GeneratorType)
+
+        expected_label = ('ORIGIN', 'PICK', 'PICK')
+        for activity, label in zip(plan_sequences, expected_label):
+            assert isinstance(activity, Plan)
+            assert activity.activity == label
+            assert isinstance(activity.func, types.FunctionType)
+
+    def test_with_empty_sequence(self):
+        strategy_test = Strategy()
+        plan_sequences = strategy_test.get_activity()
+        assert isinstance(plan_sequences, types.GeneratorType)
+
+        with pytest.raises(StopIteration) as exception_info:
+            next_result = next(plan_sequences)
+
 class TestPlanInitiation(object):
     def test_object_type(self):
         plan_test = Plan('ORIGIN', lambda x: x)
