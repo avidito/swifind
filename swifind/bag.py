@@ -7,19 +7,33 @@ class Bag:
     Data container to hold collected data from web-scraping.
     """
     def __init__(self):
-        self.data = {}
+        self.items = {}
         self.logs = {
                 'swimming':{'counter': 0},
                 'activity':[]
             }
 
-    def get_all(self):
+    # Getter Methods
+    def get_items(self):
         """
-        Take out all information inside bag.
+        Retrieve all collected data.
         """
-        result = {k:v for k, v in self.data.items()}
-        self.data = {}
-        return result
+        items = {**self.items}
+        return items
+
+    def get_logs(self):
+        """
+        Retrieve all logs data.
+        """
+        logs = {**self.logs}
+        return logs
+
+    # Adder Methods
+    def add_item(self, id, content):
+        """
+        Add content to bag.
+        """
+        self.items[id] = content
 
     def add_log(self, mode, *args, **kwargs):
         """
@@ -29,7 +43,7 @@ class Bag:
         if mode in ('start', 'end', 'unpack'):
             self.logs['swimming'][f'{mode}_time'] = timestamp
         elif mode in ALL_ACTIVITY:
-            [line] = args
+            [line, order] = args
             status = kwargs.get('status')
             log = {
                 'activity': mode,
@@ -40,9 +54,3 @@ class Bag:
             }
             self.logs['activity'].append(log)
             self.logs['swimming']['counter'] += 1
-
-    def add_item(self, id, content):
-        """
-        Add content to bag.
-        """
-        self.data[id] = content

@@ -38,10 +38,14 @@ class Catfish:
         Start swimming.
         """
         for pointer in self.strategy.get_activity():
-            pointer.func(self)
+            pointer.func(self, pointer.order)
 
-    def unpack(self):
+    def retrieve(self, include_logs=False):
         """
-        Unpack Bag content.
+        Get collected item from Bag.
         """
-        return self.bag.data # Temporary
+        items = {'items': self.bag.get_items()}
+        if (include_logs):
+            logs = self.bag.get_logs()
+            items = {**items, 'logs': logs}
+        return items

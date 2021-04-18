@@ -26,7 +26,7 @@ class TestExtractOrigin(object):
     def test_with_valid_arguments(self):
         catfish_test = Catfish(DUMMY_SWIPL)
         func = extract_origin(['https://quotes.toscrape.com/'], 1)
-        func(catfish_test)
+        func(catfish_test, 0)
 
         catfish_test_view = catfish_test.view
         assert catfish_test_view is not None
@@ -56,11 +56,11 @@ class TestExtractPick(object):
 
     def test_with_valid_arguments(self):
         catfish_test = Catfish(DUMMY_SWIPL)
-        extract_origin(['https://quotes.toscrape.com/'], 1)(catfish_test)
+        extract_origin(['https://quotes.toscrape.com/'], 1)(catfish_test, 0)
         func = extract_pick(['title', "'h1 a text'"], 10)
-        func(catfish_test)
+        func(catfish_test, 1)
 
-        result_data = catfish_test.bag.data.get('title', None)
+        result_data = catfish_test.bag.items.get('title', None)
         expected_data = 'Quotes to Scrape'
         assert result_data == expected_data
 

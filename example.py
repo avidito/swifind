@@ -9,5 +9,5 @@ cf = Catfish(path)
 cf.swim()
 
 # Retrieve
-result = cf.unpack()
+result = cf.retrieve()
 print(f"\nResult:\n{json.dumps(result, indent=4)}")

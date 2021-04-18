@@ -16,13 +16,13 @@ Available activity:
 def extract_origin(args_raw, line):
     [url] = args_raw
 
-    def activity(catfish):
+    def activity(catfish, order):
         """
         Get origin page and assign it to strategy.
         """
         req = requests.get(url)
         catfish.view = BeautifulSoup(req.content, 'lxml')
-        catfish.bag.add_log('ORIGIN', line)
+        catfish.bag.add_log('ORIGIN', line, order)
 
     return activity
 
@@ -30,13 +30,13 @@ def extract_pick(args_raw, line):
     [id, path] = args_raw
     path = path.strip("'")
 
-    def activity(catfish):
+    def activity(catfish, order):
         content = catfish.view
         for tag in path.split(' '):
             content = getattr(content, tag)
 
         catfish.bag.add_item(id, content)
-        catfish.bag.add_log('PICK', line)
+        catfish.bag.add_log('PICK', line, order)
 
     return activity
 
