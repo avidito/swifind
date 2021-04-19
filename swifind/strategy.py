@@ -1,3 +1,5 @@
+from interpreter.exception import SwiplValidationError
+
 class Strategy:
     """
     Function sequence handler for each swimmer.
@@ -9,6 +11,9 @@ class Strategy:
         """
         Adding activity to strategy plans.
         """
+        if (self.tail is not None) and (label == 'ORIGIN'):
+            raise SwiplValidationError("ORIGIN order error.")
+
         activity_plan = Plan(label, func)
         if (self.root is None):
             self.root = activity_plan
