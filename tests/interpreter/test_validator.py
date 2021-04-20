@@ -3,7 +3,7 @@ import pytest
 
 from tests.constant import VALIDATE_SWIPL_PATH
 
-from swifind.interpreter.exception import ArgumentsError
+from swifind.exception import ArgumentsError
 from swifind.interpreter.parser import parse_swipl
 from swifind.interpreter.validator import (validate_origin,
                                            validate_pick,

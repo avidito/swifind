@@ -1,4 +1,4 @@
-from .interpreter.exception import SwiplValidationError
+from .exception import SwiplValidationError
 
 LOGIC_CHECK = {
     'ORIGIN': [

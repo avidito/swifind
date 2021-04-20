@@ -1,9 +1,9 @@
-from swifind.interpreter.validator import validate_swipl
-from swifind.interpreter.extractor import extract_swipl
-from swifind.interpreter.parser import parse_swipl
+from .interpreter.validator import validate_swipl
+from .interpreter.extractor import extract_swipl
+from .interpreter.parser import parse_swipl
 
-from swifind.strategy import Strategy
-from swifind.bag import Bag
+from .strategy import Strategy
+from .bag import Bag
 
 class Catfish:
     """

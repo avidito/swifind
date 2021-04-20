@@ -1,4 +1,3 @@
-# Validation Exception
 class SwiplValidationError(Exception):
     """
     Raised when the syntax is violate swipl rule.

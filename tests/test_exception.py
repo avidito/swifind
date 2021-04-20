@@ -1,7 +1,7 @@
 import pytest
 
-from swifind.interpreter.exception import (SwiplValidationError,
-                                           ArgumentsError)
+from swifind.exception import (SwiplValidationError,
+                               ArgumentsError)
 
 class TestSwiplValidationError(object):
     def test_inheritance(self):

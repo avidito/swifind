@@ -10,7 +10,7 @@ from swifind.constant import ALL_ACTIVITY
 from swifind.catfish import Catfish
 from swifind.strategy import Strategy
 from swifind.bag import Bag
-from swifind.interpreter.exception import ArgumentsError
+from swifind.exception import ArgumentsError
 
 class TestCatfishInitiation(object):
     def test_object_type(self):

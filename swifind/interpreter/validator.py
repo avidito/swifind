@@ -1,6 +1,6 @@
 import re
 
-from .exception import ArgumentsError
+from ..exception import ArgumentsError
 
 """
 Validator Functions
