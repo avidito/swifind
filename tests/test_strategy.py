@@ -2,6 +2,7 @@ import pytest
 import types
 
 from swifind.strategy import Strategy, Plan
+from swifind.exception import LogicalError
 
 class TestStrategyInitiation(object):
     def test_object_type(self):
@@ -9,33 +10,43 @@ class TestStrategyInitiation(object):
         assert isinstance(strategy_test, Strategy)
         assert strategy_test.head is None
         assert strategy_test.tail is None
+        assert strategy_test.rank == 0
 
 class TestStrategyPlanLogicCheck(object):
     def test_with_valid_plan(self):
         strategy_test = Strategy()
-        strategy_test.plan_logic_check('ORIGIN')
+        strategy_test.plan_logic_check('ORIGIN', 1)
 
-        strategy_test.add_activity('ORIGIN', lambda x: x)
-        strategy_test.plan_logic_check('PICK')
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+        strategy_test.plan_logic_check('PICK', 2)
 
+    def test_with_invalid_plan(self):
+        strategy_test = Strategy()
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+
+        msg = "Error at line 2: 'ORIGIN' activity must be the first component and cannot be redefined."
+        with pytest.raises(LogicalError, match=f"^{msg}$") as exception_info:
+            strategy_test.plan_logic_check('ORIGIN', 2)
 
 class TestStrategyAddActivity(object):
     def test_add_origin_plan(self):
         strategy_test = Strategy()
-        strategy_test.add_activity('ORIGIN', lambda x: x)
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
         assert isinstance(strategy_test.head, Plan)
         assert isinstance(strategy_test.tail, Plan)
         assert strategy_test.head == strategy_test.tail
+        assert strategy_test.rank == 1
 
     def test_add_other_plan_simultaneously(self):
         strategy_test = Strategy()
-        strategy_test.add_activity('ORIGIN', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+        strategy_test.add_activity('PICK', lambda x: x, 2)
+        strategy_test.add_activity('PICK', lambda x: x, 3)
 
         assert isinstance(strategy_test.head, Plan)
         assert isinstance(strategy_test.tail, Plan)
         assert strategy_test.head != strategy_test.tail
+        assert strategy_test.rank == 3
 
         p = 0
         pointer = strategy_test.head
@@ -44,12 +55,22 @@ class TestStrategyAddActivity(object):
             p += 1
             pointer = pointer.next_plan
 
+    def test_with_logically_error_plan(self):
+        strategy_test = Strategy()
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+
+        msg = "Error at line 2: 'ORIGIN' activity must be the first component and cannot be redefined."
+        with pytest.raises(LogicalError, match=f"^{msg}$") as exception_info:
+            strategy_test.add_activity('ORIGIN', lambda x: x, 2)
+            assert strategy_test.rank == 1
+
+
 class TestStrategyGetActivity(object):
     def test_with_valid_sequence(self):
         strategy_test = Strategy()
-        strategy_test.add_activity('ORIGIN', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+        strategy_test.add_activity('PICK', lambda x: x, 2)
+        strategy_test.add_activity('PICK', lambda x: x, 3)
         plan_sequences = strategy_test.get_activity()
         assert isinstance(plan_sequences, types.GeneratorType)
 
@@ -70,9 +91,9 @@ class TestStrategyGetActivity(object):
 class TestStrategyShowPlan(object):
     def test_with_valid_sequence(self, capsys):
         strategy_test = Strategy()
-        strategy_test.add_activity('ORIGIN', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
-        strategy_test.add_activity('PICK', lambda x: x)
+        strategy_test.add_activity('ORIGIN', lambda x: x, 1)
+        strategy_test.add_activity('PICK', lambda x: x, 2)
+        strategy_test.add_activity('PICK', lambda x: x, 3)
 
         expected_plans = ("START\n|\n"
                           "A0: `ORIGIN`\n|\n"

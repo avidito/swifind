@@ -4,11 +4,11 @@ from bs4 import BeautifulSoup
 
 from tests.constant import DUMMY_SWIPL
 
-from swifind.catfish import Catfish
-from swifind.strategy import Strategy, Plan
 from swifind.interpreter.extractor import (extract_origin,
                                            extract_pick,
                                            extract_swipl)
+from swifind.catfish import Catfish
+from swifind.strategy import Strategy, Plan
 
 class TestExtractOrigin(object):
     def test_return_value_type(self):
@@ -83,3 +83,4 @@ class TestExtractSwipl(object):
         assert isinstance(result, Strategy)
         assert result.head is not None
         assert result.tail is not None
+        assert result.rank == 1

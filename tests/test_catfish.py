@@ -6,8 +6,8 @@ from tests.constant import (CATFISH_INITIATION,
                             CATFISH_RETRIEVE,
                             TIMESTAMP_ATTRIBUTES)
 
-from swifind.constant import ALL_ACTIVITY
 from swifind.catfish import Catfish
+from swifind.constant import ALL_ACTIVITY
 from swifind.strategy import Strategy
 from swifind.bag import Bag
 from swifind.exception import ArgumentsError

@@ -1,11 +1,11 @@
-from .exception import SwiplValidationError
+from .exception import LogicalError
 
 LOGIC_CHECK = {
     'ORIGIN': [
-        lambda st, act: st.rank == 0,
+        (lambda st, act: st.rank == 0, 'must be the first component and cannot be redefined.'),
     ],
     'PICK': [
-        lambda st, act: True,
+        (lambda st, act: True, '')
     ],
 }
 
@@ -18,20 +18,19 @@ class Strategy:
         self.tail = None
         self.rank = 0
 
-    def plan_logic_check(self, activity):
+    def plan_logic_check(self, activity, line):
         """
         Check logical validity of plan addition.
         """
-        for check in LOGIC_CHECK[activity]:
+        for check, error_msg in LOGIC_CHECK[activity]:
             if check(self, activity) == False:
-                msg = f"Logical Error from `{activity}` activity."
-                raise SwiplValidationError(msg)
+                raise LogicalError(activity, error_msg, line)
 
-    def add_activity(self, activity, func):
+    def add_activity(self, activity, func, line):
         """
         Adding activity to strategy plans.
         """
-        self.plan_logic_check(activity)
+        self.plan_logic_check(activity, line)
 
         activity_plan = Plan(activity, func)
         if (self.head is None):
@@ -40,6 +39,7 @@ class Strategy:
         else:
             self.tail.add_link(activity_plan)
             self.tail = self.tail.next_plan
+        self.rank += 1
 
     def get_activity(self):
         """

@@ -1,23 +1,24 @@
 import pytest
 
-from swifind.exception import (SwiplValidationError,
-                               ArgumentsError)
+from swifind.exception import (SwiplError,
+                               ArgumentsError,
+                               LogicalError)
 
-class TestSwiplValidationError(object):
+class TestSwiplError(object):
     def test_inheritance(self):
-        sw_error = SwiplValidationError("Test")
+        sw_error = SwiplError("Test")
         assert isinstance(sw_error, Exception)
 
     def test_valid_error_message(self):
         msg = "Exception message"
-        sw_error = SwiplValidationError(msg)
-        with pytest.raises(SwiplValidationError, match=f"^{msg}$") as exception_info:
+        sw_error = SwiplError(msg)
+        with pytest.raises(SwiplError, match=f"^{msg}$") as exception_info:
             raise sw_error
 
 class TestArgumentsError(object):
     def test_inheritance(self):
         args_error = ArgumentsError('ORIGIN', 1)
-        assert isinstance(args_error, SwiplValidationError)
+        assert isinstance(args_error, SwiplError)
         assert isinstance(args_error, Exception)
 
     def test_with_missing_arguments_condition(self):
@@ -58,3 +59,16 @@ class TestArgumentsError(object):
         msg = "'PATH' from 'PICK' activity violates swipl rule at line 10."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             raise args_error
+
+class TestLogicalError(object):
+    def test_inheritance(self):
+        args_error = LogicalError('ORIGIN', 'must be valid.', 10)
+        assert isinstance(args_error, SwiplError)
+        assert isinstance(args_error, Exception)
+
+    def test_with_logical_error(self):
+        logical_error = LogicalError('ORIGIN', 'must be valid.', 10)
+
+        msg = "Error at line 10: 'ORIGIN' activity must be valid."
+        with pytest.raises(LogicalError, match=f"^{msg}$") as exception_info:
+            raise logical_error

@@ -3,11 +3,11 @@ import pytest
 
 from tests.constant import VALIDATE_SWIPL_PATH
 
-from swifind.exception import ArgumentsError
-from swifind.interpreter.parser import parse_swipl
 from swifind.interpreter.validator import (validate_origin,
                                            validate_pick,
                                            validate_swipl)
+from swifind.exception import ArgumentsError
+from swifind.interpreter.parser import parse_swipl
 
 class TestValidateOrigin(object):
     def test_with_valid_arguments(self):

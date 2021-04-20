@@ -55,5 +55,5 @@ def extract_swipl(strategy, components):
     for component in components:
         plan, args_raw, line = component
         activity = EXTRACTORS[plan](args_raw, line)
-        strategy.add_activity(plan, activity)
+        strategy.add_activity(plan, activity, line)
     return strategy

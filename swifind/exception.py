@@ -1,11 +1,11 @@
-class SwiplValidationError(Exception):
+class SwiplError(Exception):
     """
-    Raised when the syntax is violate swipl rule.
+    Raised when the swipl script is violate swipl rule.
     """
     def __init__(self, message):
         super().__init__(message)
 
-class ArgumentsError(SwiplValidationError):
+class ArgumentsError(SwiplError):
     """
     Raised when activity arguments violate swipl rule.
     """
@@ -33,3 +33,11 @@ class ArgumentsError(SwiplValidationError):
         """
         message = f"'{argument_type_error}' from '{self.activity}' activity violates swipl rule at line {self.line_id}."
         super().__init__(message)
+
+class LogicalError(SwiplError):
+    """
+    Raised when activity plan violate sequence rule.
+    """
+    def __init__(self, activity, message, line):
+        error_message = f"Error at line {line}: '{activity}' activity {message}"
+        super().__init__(error_message)
