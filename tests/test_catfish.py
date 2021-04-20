@@ -26,7 +26,7 @@ class TestCatfishInitiation(object):
         catfish_test = Catfish(path)
 
         strategy = catfish_test.strategy
-        assert strategy.root is not None
+        assert strategy.head is not None
         assert strategy.tail is not None
 
     def test_with_invalid_component(object):

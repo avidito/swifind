@@ -81,5 +81,5 @@ class TestExtractSwipl(object):
                 ]
         result = extract_swipl(strategy_test, components_test)
         assert isinstance(result, Strategy)
-        assert result.root is not None
+        assert result.head is not None
         assert result.tail is not None

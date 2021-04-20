@@ -7,16 +7,25 @@ class TestStrategyInitiation(object):
     def test_object_type(self):
         strategy_test = Strategy()
         assert isinstance(strategy_test, Strategy)
-        assert strategy_test.root is None
+        assert strategy_test.head is None
         assert strategy_test.tail is None
+
+class TestStrategyPlanLogicCheck(object):
+    def test_with_valid_plan(self):
+        strategy_test = Strategy()
+        strategy_test.plan_logic_check('ORIGIN')
+
+        strategy_test.add_activity('ORIGIN', lambda x: x)
+        strategy_test.plan_logic_check('PICK')
+
 
 class TestStrategyAddActivity(object):
     def test_add_origin_plan(self):
         strategy_test = Strategy()
         strategy_test.add_activity('ORIGIN', lambda x: x)
-        assert isinstance(strategy_test.root, Plan)
+        assert isinstance(strategy_test.head, Plan)
         assert isinstance(strategy_test.tail, Plan)
-        assert strategy_test.root == strategy_test.tail
+        assert strategy_test.head == strategy_test.tail
 
     def test_add_other_plan_simultaneously(self):
         strategy_test = Strategy()
@@ -24,12 +33,12 @@ class TestStrategyAddActivity(object):
         strategy_test.add_activity('PICK', lambda x: x)
         strategy_test.add_activity('PICK', lambda x: x)
 
-        assert isinstance(strategy_test.root, Plan)
+        assert isinstance(strategy_test.head, Plan)
         assert isinstance(strategy_test.tail, Plan)
-        assert strategy_test.root != strategy_test.tail
+        assert strategy_test.head != strategy_test.tail
 
         p = 0
-        pointer = strategy_test.root
+        pointer = strategy_test.head
         while(pointer):
             assert pointer.order == p
             p += 1

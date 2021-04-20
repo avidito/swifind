@@ -1,22 +1,41 @@
-from interpreter.exception import SwiplValidationError
+from .interpreter.exception import SwiplValidationError
+
+LOGIC_CHECK = {
+    'ORIGIN': [
+        lambda st, act: st.rank == 0,
+    ],
+    'PICK': [
+        lambda st, act: True,
+    ],
+}
 
 class Strategy:
     """
     Function sequence handler for each swimmer.
     """
     def __init__(self):
-        self.root, self.tail = None, None
+        self.head = None
+        self.tail = None
+        self.rank = 0
 
-    def add_activity(self, label, func):
+    def plan_logic_check(self, activity):
+        """
+        Check logical validity of plan addition.
+        """
+        for check in LOGIC_CHECK[activity]:
+            if check(self, activity) == False:
+                msg = f"Logical Error from `{activity}` activity."
+                raise SwiplValidationError(msg)
+
+    def add_activity(self, activity, func):
         """
         Adding activity to strategy plans.
         """
-        if (self.tail is not None) and (label == 'ORIGIN'):
-            raise SwiplValidationError("ORIGIN order error.")
+        self.plan_logic_check(activity)
 
-        activity_plan = Plan(label, func)
-        if (self.root is None):
-            self.root = activity_plan
+        activity_plan = Plan(activity, func)
+        if (self.head is None):
+            self.head = activity_plan
             self.tail = activity_plan
         else:
             self.tail.add_link(activity_plan)
@@ -26,7 +45,7 @@ class Strategy:
         """
         Move plan pointer and return activity.
         """
-        plan_pointer = self.root
+        plan_pointer = self.head
         while(plan_pointer):
             yield plan_pointer
             plan_pointer = plan_pointer.next_plan
@@ -35,7 +54,7 @@ class Strategy:
         """
         Show sequence of plan assigned to this strategy.
         """
-        plan = self.root
+        plan = self.head
         print("START\n|")
         while(plan):
             print(f"{plan}\n|")
