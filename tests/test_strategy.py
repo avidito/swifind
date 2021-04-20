@@ -2,7 +2,8 @@ import pytest
 import types
 
 from swifind.strategy import Strategy, Plan
-from swifind.exception import LogicalError
+from swifind.exception import (LogicalError,
+                               ObjectTypeError)
 
 class TestStrategyInitiation(object):
     def test_object_type(self):
@@ -162,3 +163,22 @@ class TestPlanAddLink(object):
         assert plan_test_src.order == 0
         assert plan_test_src.next_plan == plan_test_des
         assert plan_test_des.order == 1
+
+    def test_linking_from_unassigned_plan(self):
+        plan_test_src = Plan('PICK', lambda x: x)
+        plan_test_des = Plan('PICK', lambda x: x)
+
+        msg = "'Plan' must be a member of 'Strategy' before linked as source."
+        with pytest.raises(ObjectTypeError, match=f"^{msg}$") as exception_info:
+            plan_test_src.add_link(plan_test_des)
+            assert plan_test_src.next_plan is None
+            assert plan_test_src.order is None
+
+    def test_add_invalid_object_type(self):
+        plan_test_src = Plan('ORIGIN', lambda x: x)
+        plan_test_des = 'Plan'
+
+        msg = "'Plan' must be linked with 'Plan' object, not 'str' object."
+        with pytest.raises(ObjectTypeError, match=f"^{msg}$") as exception_info:
+            plan_test_src.add_link(plan_test_des)
+            assert plan_test_src.next_plan is None

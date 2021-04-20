@@ -1,4 +1,4 @@
-from .exception import LogicalError
+from .exception import LogicalError, ObjectTypeError
 
 LOGIC_CHECK = {
     'ORIGIN': [
@@ -79,9 +79,11 @@ class Plan:
         """
         Linking new next plan to this plan.
         """
-        if (isinstance(destination, Plan)):
+        if (self.order is None):
+            raise ObjectTypeError(f"'Plan' must be a member of 'Strategy' before linked as source.")
+        elif (not isinstance(destination, Plan)):
+            object_type = type(destination).__name__
+            raise ObjectTypeError(f"'Plan' must be linked with 'Plan' object, not '{object_type}' object.")
+        else:
             self.next_plan = destination
             self.next_plan.order = self.order + 1
-        # else:
-        #     object_type = type(destination)
-        #     raise ObjectTypeError(f"Plan must be linked with Plan object, not {object_type} object.")

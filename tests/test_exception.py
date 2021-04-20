@@ -92,7 +92,7 @@ class TestObjectTypeError(object):
         assert isinstance(object_error, Exception)
 
     def test_valid_error_message(self):
-        error_msg = "Plan must be linked with Plan object, not int object."
+        error_msg = "'Plan' must be linked with 'Plan' object, not 'int' object."
         object_error = ObjectTypeError(error_msg)
         with pytest.raises(ObjectTypeError, match=f"^{error_msg}$") as exception_info:
             raise object_error
