@@ -1,18 +1,18 @@
-from swifind.interpreter.validator import validate_swipl
-from swifind.interpreter.extractor import extract_swipl
-from swifind.interpreter.parser import parse_swipl
+from .interpreter.validator import validate_swipl
+from .interpreter.extractor import extract_swipl
+from .interpreter.parser import parse_swipl
 
-from swifind.strategy import Strategy
-from swifind.bag import Bag
+from .strategy import Strategy
+from .bag import Bag
 
 class Catfish:
     """
     Default Catfish class.
     """
-    def __init__(self):
-        self.validate = False
-        self.view = None
-        self.strategy = Strategy()
+    def __init__(self, path):
+        strategy = Strategy()
+        components = validate_swipl(parse_swipl(path))
+        self.strategy = extract_swipl(strategy, components)
         self.bag = Bag()
 
     class Closure(object):
@@ -32,23 +32,20 @@ class Catfish:
 
             return wrapper
 
-    def prepare(self, path):
-        """
-        Initiate swiming strategy from swipl script.
-        """
-        self.validate, components = validate_swipl(parse_swipl(path))
-        self.strategy = extract_swipl(self.strategy, components)
-
     @Closure.log_wrapper
     def swim(self):
         """
         Start swimming.
         """
         for pointer in self.strategy.get_activity():
-            pointer.func(self)
+            pointer.func(self, pointer.order)
 
-    def unpack(self):
+    def retrieve(self, include_logs=False):
         """
-        Unpack Bag content.
+        Get collected item from Bag.
         """
-        return self.bag.data # Temporary
+        items = {'items': self.bag.get_items()}
+        if (include_logs):
+            logs = self.bag.get_logs()
+            items = {**items, 'logs': logs}
+        return items
