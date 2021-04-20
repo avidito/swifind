@@ -2,18 +2,20 @@ import pytest
 
 from swifind.exception import (SwiplError,
                                ArgumentsError,
-                               LogicalError)
+                               LogicalError,
+                               SwifindError,
+                               ObjectTypeError)
 
 class TestSwiplError(object):
     def test_inheritance(self):
-        sw_error = SwiplError("Test")
-        assert isinstance(sw_error, Exception)
+        sp_error = SwiplError("Test")
+        assert isinstance(sp_error, Exception)
 
     def test_valid_error_message(self):
-        msg = "Exception message"
-        sw_error = SwiplError(msg)
-        with pytest.raises(SwiplError, match=f"^{msg}$") as exception_info:
-            raise sw_error
+        error_msg = "Exception message"
+        sp_error = SwiplError(error_msg)
+        with pytest.raises(SwiplError, match=f"^{error_msg}$") as exception_info:
+            raise sp_error
 
 class TestArgumentsError(object):
     def test_inheritance(self):
@@ -62,13 +64,35 @@ class TestArgumentsError(object):
 
 class TestLogicalError(object):
     def test_inheritance(self):
-        args_error = LogicalError('ORIGIN', 'must be valid.', 10)
-        assert isinstance(args_error, SwiplError)
-        assert isinstance(args_error, Exception)
+        logical_error = LogicalError('ORIGIN', 'must be valid.', 10)
+        assert isinstance(logical_error, SwiplError)
+        assert isinstance(logical_error, Exception)
 
     def test_with_logical_error(self):
         logical_error = LogicalError('ORIGIN', 'must be valid.', 10)
-
         msg = "Error at line 10: 'ORIGIN' activity must be valid."
         with pytest.raises(LogicalError, match=f"^{msg}$") as exception_info:
             raise logical_error
+
+class TestSwifindError(object):
+    def test_inheritance(self):
+        sf_error = SwifindError('Test')
+        assert isinstance(sf_error, Exception)
+
+    def test_valid_error_message(self):
+        error_msg = "Exception Message"
+        sf_error = SwifindError(error_msg)
+        with pytest.raises(SwifindError, match=f"^{error_msg}$") as exception_info:
+            raise sf_error
+
+class TestObjectTypeError(object):
+    def test_inheritance(self):
+        object_error = ObjectTypeError('Object Type Test')
+        assert isinstance(object_error, SwifindError)
+        assert isinstance(object_error, Exception)
+
+    def test_valid_error_message(self):
+        error_msg = "Plan must be linked with Plan object, not int object."
+        object_error = ObjectTypeError(error_msg)
+        with pytest.raises(ObjectTypeError, match=f"^{error_msg}$") as exception_info:
+            raise object_error

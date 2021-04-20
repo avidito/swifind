@@ -71,7 +71,7 @@ class Plan:
         self.order = None if (activity != 'ORIGIN') else 0
         self.next_plan = None
 
-    def __repr__(self):
+    def __str__(self):
         order = '[Not Assigned]' if (self.order is None) else f'A{self.order}'
         return f'{order}: `{self.activity}`'
 
@@ -79,5 +79,9 @@ class Plan:
         """
         Linking new next plan to this plan.
         """
-        self.next_plan = destination
-        self.next_plan.order = self.order + 1
+        if (isinstance(destination, Plan)):
+            self.next_plan = destination
+            self.next_plan.order = self.order + 1
+        # else:
+        #     object_type = type(destination)
+        #     raise ObjectTypeError(f"Plan must be linked with Plan object, not {object_type} object.")

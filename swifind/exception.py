@@ -1,13 +1,13 @@
 class SwiplError(Exception):
     """
-    Raised when the swipl script is violate swipl rule.
+    Raised when the swipl script is violates swipl rule.
     """
     def __init__(self, message):
         super().__init__(message)
 
 class ArgumentsError(SwiplError):
     """
-    Raised when activity arguments violate swipl rule.
+    Raised when activity arguments violates swipl rule.
     """
     def __init__(self, activity, line_id):
         self.activity = activity
@@ -36,8 +36,22 @@ class ArgumentsError(SwiplError):
 
 class LogicalError(SwiplError):
     """
-    Raised when activity plan violate sequence rule.
+    Raised when activity plan violates sequence rule.
     """
     def __init__(self, activity, message, line):
         error_message = f"Error at line {line}: '{activity}' activity {message}"
         super().__init__(error_message)
+
+class SwifindError(Exception):
+    """
+    Raised when the swipl script is violates swipl rule.
+    """
+    def __init__(self, message):
+        super().__init__(message)
+
+class ObjectTypeError(SwifindError):
+    """
+    Raised when some action violates swifind object rule.
+    """
+    def __init__(self, message):
+        super().__init__(message)
