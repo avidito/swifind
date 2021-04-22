@@ -15,7 +15,7 @@ class TestReadScript(object):
 
         expected_components = [
                 (1, "ORIGIN https://www.testing.com/"),
-                (3, "PICK title 'h1 a text'"),
+                (3, "PICK title 'h1 a'"),
             ]
         for result, expected in zip(result_components, expected_components):
             assert isinstance(result, tuple)
@@ -39,8 +39,8 @@ class TestParseSwipl(object):
 
         expected_components = [
                 (1, 'ORIGIN', 'http://quotes.toscrape.com'),
-                (2, 'PICK', "title 'h1 a text'"),
-                (3, 'PICK', "subtitle 'h2 a text'")
+                (2, 'PICK', "title 'h1 a'"),
+                (3, 'PICK', "subtitle 'h2 a'")
             ]
         for result, expected in zip(result_components, expected_components):
             assert result == expected

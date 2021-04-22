@@ -1,4 +1,4 @@
 ORIGIN https://quotes.toscrape.com/
 
-PICK title 'h1 a text'
-PICK link 'footer div p a text'
+PICK title 'h1 a'
+PICK link 'footer div p a'

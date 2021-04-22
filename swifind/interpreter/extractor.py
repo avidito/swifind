@@ -27,13 +27,14 @@ def extract_origin(args_raw, line):
     return activity
 
 def extract_pick(args_raw, line):
-    [id, path] = args_raw
+    [id, path, attr] = args_raw
     path = path.strip("'")
 
     def activity(catfish, order):
         content = catfish.view
         for tag in path.split(' '):
             content = getattr(content, tag)
+        content = content.get(attr, '') if (attr) else '\n'.join([txt for txt in content.stripped_strings]) 
 
         catfish.bag.add_item(id, content)
         catfish.bag.add_log('PICK', line, order)
