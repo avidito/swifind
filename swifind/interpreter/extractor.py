@@ -1,6 +1,6 @@
-import re
 import requests
 from bs4 import BeautifulSoup
+import re
 
 from ..bag import Bag
 from ..strategy import Strategy
@@ -31,10 +31,16 @@ def extract_pick(args_raw, line):
     path = path.strip("'")
 
     def activity(catfish, order):
+        index_reg = re.compile(r".+\[\d+\]")
         content = catfish.view
+
         for tag in path.split(' '):
-            content = getattr(content, tag)
-        content = content.get(attr, '') if (attr) else '\n'.join([txt for txt in content.stripped_strings]) 
+            if (index_reg.search(tag)):
+                [tag_clean, index] = tag[:-1].split('[')
+                content = content.find_all(tag_clean, recursive=False)[int(index)]
+            else:
+                content = content.find(tag)
+        content = content.get(attr, '') if (attr) else '\n'.join([txt for txt in content.stripped_strings])
 
         catfish.bag.add_item(id, content)
         catfish.bag.add_log('PICK', line, order)

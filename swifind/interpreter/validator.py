@@ -31,6 +31,7 @@ def validate_pick(args_raw, line_id):
     args = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
     args_error = ArgumentsError('PICK', line_id)
     args_count = len(args)
+    indexes = re.findall(r"(?<=\[)[^\s]+(?=\])", args[1])
 
     # Argument Count
     if (args_count < 2): args_error.missing(argument_missing=ARGUMENTS['PICK'][args_count])
@@ -42,6 +43,10 @@ def validate_pick(args_raw, line_id):
 
     # Default Argument type
     elif(len(args) == 3 and not args[2].isalnum()): args_error.type(argument_type_error=ARGUMENTS['PICK'][2])
+
+    # Index Type
+    elif(indexes and any(map(lambda x: not x.isnumeric(), indexes))): args_error.type(argument_type_error=ARGUMENTS['PICK'][1], sub_argument='indexes')
+
     else:
         if len(args) < 3:
             args = [*args, None]
