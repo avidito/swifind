@@ -33,8 +33,10 @@ def validate_pick(args_raw, line_id):
     args_count = len(args)
     if(args_count > 1):
         indexes = re.findall(r"(?<=\[)[^\s]+(?=\])", args[1])
+        selectors = re.findall(r"(?<=\{)[^\s]+(?=\})", args[1])
     else:
         indexes = ''
+        selectors = ''
 
     # Argument Count
     if (args_count < 2): args_error.missing(argument_missing=ARGUMENTS['PICK'][args_count])
@@ -49,7 +51,7 @@ def validate_pick(args_raw, line_id):
 
     # Index Type
     elif(indexes and any(map(lambda x: not x.isnumeric(), indexes))): args_error.type(argument_type_error=ARGUMENTS['PICK'][1], sub_argument='indexes')
-
+    elif(selectors and any(map(lambda x: not x.isprintable(), selectors))): args_error.type(argument_type_error=ARGUMENTS['PICK'][1], sub_argument='selectors')
     else:
         if len(args) < 3:
             args = [*args, None]

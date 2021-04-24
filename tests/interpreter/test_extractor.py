@@ -38,24 +38,26 @@ class TestExtractOrigin(object):
 
 class TestExtractPick(object):
     def test_return_value_type(self):
-        func = extract_pick(['title', "'h1 a'", None], 10)
+        func = extract_pick(['title', "'div div div h1 a'", None], 10)
         assert isinstance(func, types.FunctionType)
 
         func = extract_pick(['quote', "'div div[1] span'", None], 10)
         assert isinstance(func, types.FunctionType)
 
     def test_local_variable(self):
-        func = extract_pick(['title', "'h1 a'", None], 10)
+        func = extract_pick(['title', "'div div div h1 a'", None], 10)
         assert ('attr', 'id', 'line', 'path',) == func.__code__.co_freevars
 
         vars_results = [var.cell_contents for var in func.__closure__]
-        vars_expected = [None, 'title', 10, 'h1 a']
+        vars_expected = [None, 'title', 10, 'div div div h1 a']
         assert vars_results == vars_expected
 
     def test_with_valid_arguments(self):
         catfish_test = Catfish(DUMMY_SWIPL)
         extract_origin(['https://quotes.toscrape.com/'], 1)(catfish_test, 0)
-        func = extract_pick(['title', "'h1 a'", None], 10)
+
+        # Test 1
+        func = extract_pick(['title', "'div div div h1 a'", None], 10)
         func(catfish_test, 1)
 
         result_data = catfish_test.bag.items.get('title', None)
@@ -66,6 +68,7 @@ class TestExtractPick(object):
         expected_log = {'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
+        # Test 2
         func = extract_pick(['link', "'footer div p a'", 'href'], 10)
         func(catfish_test, 1)
 
@@ -77,7 +80,20 @@ class TestExtractPick(object):
         expected_log = { 'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
+        # Test 3
         func = extract_pick(['author', "'div div[1] div div span[1] small'", None], 10)
+        func(catfish_test, 1)
+
+        result_data = catfish_test.bag.items.get('author', None)
+        expected_data = 'Albert Einstein'
+        assert result_data == expected_data
+
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
+        expected_log = { 'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
+        assert result_log == expected_log
+
+        # Test 4
+        func = extract_pick(['author', "'div div{class=\"row\"} div div span[1] small'", None], 10)
         func(catfish_test, 1)
 
         result_data = catfish_test.bag.items.get('author', None)
@@ -95,7 +111,7 @@ class TestExtractPick(object):
         func(catfish_test, 1)
 
         result_data = catfish_test.bag.items.get('title', None)
-        expected_data = ''
+        expected_data = None
         assert result_data == expected_data
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}

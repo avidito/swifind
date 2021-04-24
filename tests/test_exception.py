@@ -70,6 +70,11 @@ class TestArgumentsError(object):
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             raise args_error
 
+        args_error.type('PATH', 'selectors')
+        msg = "selectors in 'PATH' from 'PICK' violates swiple rule at line 10."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            raise args_error
+
 class TestLogicalError(object):
     def test_inheritance(self):
         logical_error = LogicalError('ORIGIN', 'must be valid.', 10)

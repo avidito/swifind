@@ -83,6 +83,10 @@ class TestValidatePick(object):
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_pick("quote 'div div[x] span'", 10)
 
+        msg = "indexes in 'PATH' from 'PICK' violates swiple rule at line 10."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_pick("quote 'div[1!] span'", 10)
+
 class TestValidateSwipl(object):
     def test_return_values_datatype(self):
         path = os.path.join(VALIDATE_SWIPL_PATH, 'valid_components_ex1.swipl')

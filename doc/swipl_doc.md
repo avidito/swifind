@@ -28,13 +28,15 @@ Rule:
 - `PATH` argument must be a string, contain element path (with single quotation mark).
 - `ATTR` argument must be a string, contain desired element attribute (class, id, etc.). By default, `ATTR` will be `None`, and will return component text (recursively).
 
-Extra:
-- `PATH` argument also accept component indexing. For example, if you want to extract second `div` element, just define it with `div[1]` (it's using 0-indexing).
+More about `PATH`:
+- To use `PATH` component indexing, specify index inside `[]`. For example, if you want to extract second `div` element, define it with `div[1]` (it's using 0-indexing).
+- To use `PATH` component attribute selector, specify attribute-value pair inside `{}`. Value must be enclosed with double-quotation mark. For example, if you want to extract `div` with class "row", define it with `div{class="row"}`.
 
 Example:
 ```sh
-PICK title 'h1 a text'
+PICK title 'div div div h1 a'
 PICK cls 'div div' class
-PICK quote 'div div[1] div div span'
 PICK login 'div div div[1] p a' href
+PICK quote 'div div{class="row"} div div span'
+PICK author 'div div{class="row"} div div span[1] small'
 ```
