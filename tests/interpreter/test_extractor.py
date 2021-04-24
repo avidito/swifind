@@ -33,17 +33,15 @@ class TestExtractOrigin(object):
         assert isinstance(catfish_test_view, BeautifulSoup)
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][0].items() if (k != 'timestamp')}
-        expected_log = {
-            'activity': 'ORIGIN',
-            'order': 0,
-            'line': 1,
-            'status': 'PASS',
-        }
+        expected_log = {'activity': 'ORIGIN', 'order': 0, 'line': 1, 'status': 'PASS',}
         assert result_log == expected_log
 
 class TestExtractPick(object):
     def test_return_value_type(self):
         func = extract_pick(['title', "'h1 a'", None], 10)
+        assert isinstance(func, types.FunctionType)
+
+        func = extract_pick(['quote', "'div div[1] span'", None], 10)
         assert isinstance(func, types.FunctionType)
 
     def test_local_variable(self):
@@ -65,12 +63,7 @@ class TestExtractPick(object):
         assert result_data == expected_data
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
-        expected_log = {
-            'activity': 'PICK',
-            'order': 1,
-            'line': 10,
-            'status': 'PASS',
-        }
+        expected_log = {'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
         func = extract_pick(['link', "'footer div p a'", 'href'], 10)
@@ -81,12 +74,18 @@ class TestExtractPick(object):
         assert result_data == expected_data
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
-        expected_log = {
-            'activity': 'PICK',
-            'order': 1,
-            'line': 10,
-            'status': 'PASS',
-        }
+        expected_log = { 'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
+        assert result_log == expected_log
+
+        func = extract_pick(['author', "'div div[1] div div span[1] small'", None], 10)
+        func(catfish_test, 1)
+
+        result_data = catfish_test.bag.items.get('author', None)
+        expected_data = 'Albert Einstein'
+        assert result_data == expected_data
+
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
+        expected_log = { 'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
     def test_with_non_exist_attr(self):
@@ -100,12 +99,7 @@ class TestExtractPick(object):
         assert result_data == expected_data
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
-        expected_log = {
-            'activity': 'PICK',
-            'order': 1,
-            'line': 10,
-            'status': 'PASS',
-        }
+        expected_log = {'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
 class TestExtractSwipl(object):
@@ -115,9 +109,10 @@ class TestExtractSwipl(object):
                     ['ORIGIN', ['http://www.testing.com'], 1],
                     ['PICK', ['title', "'h1 a'", None], 2],
                     ['PICK', ['link', "'footer div p a'", 'href'], 3],
+                    ['PICK', ['quote', "'div div[1] div'", 'href'], 3],
                 ]
         result = extract_swipl(strategy_test, components_test)
         assert isinstance(result, Strategy)
         assert result.head is not None
         assert result.tail is not None
-        assert result.rank == 3
+        assert result.rank == 4

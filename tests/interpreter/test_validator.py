@@ -40,6 +40,8 @@ class TestValidatePick(object):
         assert validate_pick("content 'div p a'", 10)
         assert validate_pick("subtitle 'div row h2'", 10)
         assert validate_pick("cls 'div div' class", 10)
+        assert validate_pick("span 'div div[1]' class", 10)
+        assert validate_pick("quote 'div div[1] div[2]'", 5)
 
     def test_with_missing_arguments(self):
         msg = "'PICK' activity missing required arguments: 'ID' at line 10."
@@ -75,6 +77,11 @@ class TestValidatePick(object):
         msg = "'ATTR' from 'PICK' activity violates swipl rule at line 10."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_pick("head 'body h1 a' h!ref", 10)
+
+    def test_with_invalid_path_indexes(self):
+        msg = "indexes in 'PATH' from 'PICK' violates swiple rule at line 10."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_pick("quote 'div div[x] span'", 10)
 
 class TestValidateSwipl(object):
     def test_return_values_datatype(self):
