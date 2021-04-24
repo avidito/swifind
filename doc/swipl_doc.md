@@ -31,12 +31,15 @@ Rule:
 More about `PATH`:
 - To use `PATH` component indexing, specify index inside `[]`. For example, if you want to extract second `div` element, define it with `div[1]` (it's using 0-indexing).
 - To use `PATH` component attribute selector, specify attribute-value pair inside `{}`. Value must be enclosed with double-quotation mark. For example, if you want to extract `div` with class "row", define it with `div{class="row"}`.
+- To enable `PATH` recursive search, add `*` after component names. For example if you want to find the first `span` recursively, define it with `span*`. Recursive search can also be combined with component indexing and  attribute selector.
 
 Example:
 ```sh
-PICK title 'div div div h1 a'
+PICK title 'h1* a'
+PICK footer 'footer div p a'
 PICK cls 'div div' class
-PICK login 'div div div[1] p a' href
-PICK quote 'div div{class="row"} div div span'
-PICK author 'div div{class="row"} div div span[1] small'
+PICK quote 'span*{class="text"}'
+PICK author 'small*{class="author"}'
+PICK third_quote 'div*{class="row"} div*{class="col-md-8"} div[2] span'
+PICK login_url 'div*{class="col-md-4"} a*' href
 ```

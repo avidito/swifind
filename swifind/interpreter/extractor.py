@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import re
 
+from .parser import parse_element_notation
 from ..bag import Bag
 from ..strategy import Strategy
 
@@ -31,22 +31,18 @@ def extract_pick(args_raw, line):
     path = path.strip("'")
 
     def activity(catfish, order):
-        index_reg = re.compile(r".+\[\S+\]")
-        selector_reg = re.compile(r".+\{\S+\}")
         content = catfish.view.find('body')
+        print("path: ", path)
+        for element in path.split(' '):
+            if (content is None): break
 
-        for tag in path.split(' '):
-            if (content is None):
-                break
-            if (index_reg.search(tag)):
-                [tag_clean, index] = tag[:-1].split('[')
-                content = content.find_all(tag_clean, recursive=False)[int(index)]
-            elif (selector_reg.search(tag)):
-                [tag_clean, selector] = tag[:-1].split('{')
-                [prop, value] = selector.split('=')
-                content = content.find(tag_clean, {prop: value.strip('"')}, recursive=False)
+            [method, tag, params] = parse_element_notation(element)
+            if (method[0] in ('find_all',)):
+                print(method, tag, params)
+                [method, index] = method
+                content = getattr(content, method)(tag, **params)[index]
             else:
-                content = content.find(tag, recursive=False)
+                content = getattr(content, method[0])(tag, **params)
         else:
             content = content.get(attr, None) if (attr) else '\n'.join([txt for txt in content.stripped_strings])
 

@@ -93,11 +93,23 @@ class TestExtractPick(object):
         assert result_log == expected_log
 
         # Test 4
-        func = extract_pick(['author', "'div div{class=\"row\"} div div span[1] small'", None], 10)
+        func = extract_pick(['author', "'small*{class=\"author\"}'", None], 10)
         func(catfish_test, 1)
 
         result_data = catfish_test.bag.items.get('author', None)
         expected_data = 'Albert Einstein'
+        assert result_data == expected_data
+
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
+        expected_log = { 'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
+        assert result_log == expected_log
+
+        # Test 5
+        func = extract_pick(['third_quote', "'div*{class=\"row\"} div*{class=\"col-md-8\"} div[2] span'", None], 10)
+        func(catfish_test, 1)
+
+        result_data = catfish_test.bag.items.get('third_quote', None)
+        expected_data = '“There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.”'
         assert result_data == expected_data
 
         result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
