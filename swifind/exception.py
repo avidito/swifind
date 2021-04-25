@@ -27,11 +27,14 @@ class ArgumentsError(SwiplError):
         message = f"'{self.activity}' activity takes {argument_need} arguments, but {argument_given} were given at line {self.line_id}."
         super().__init__(message)
 
-    def type(self, argument_type_error):
+    def type(self, argument_type_error, sub_argument=None):
         """
         Raised when there is arguments with wrong format or data type.
         """
-        message = f"'{argument_type_error}' from '{self.activity}' activity violates swipl rule at line {self.line_id}."
+        if (sub_argument):
+            message = f"{sub_argument} in '{argument_type_error}' from '{self.activity}' violates swiple rule at line {self.line_id}."
+        else:
+            message = f"'{argument_type_error}' from '{self.activity}' activity violates swipl rule at line {self.line_id}."
         super().__init__(message)
 
 class LogicalError(SwiplError):
