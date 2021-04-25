@@ -15,7 +15,7 @@ Rule:
 
 Example:
 ```sh
-ROOT https://quotes.toscrape.com/
+ORIGIN https://quotes.toscrape.com/
 ```
 
 ### `PICK`
