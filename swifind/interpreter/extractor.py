@@ -32,13 +32,11 @@ def extract_pick(args_raw, line):
 
     def activity(catfish, order):
         content = catfish.view.find('body')
-        print("path: ", path)
         for element in path.split(' '):
             if (content is None): break
 
             [method, tag, params] = parse_element_notation(element)
             if (method[0] in ('find_all',)):
-                print(method, tag, params)
                 [method, index] = method
                 content = getattr(content, method)(tag, **params)[index]
             else:
