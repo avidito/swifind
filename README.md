@@ -6,16 +6,31 @@ scraping function simplicity and modularity. It came with its scripting
 language (`swipl`) to plan web scraping and crawling strategies. `swipl` script
 will be interpreted to Python sequence of action, makes it easier to recreate,
 reuse or modify web scraping script. It can be run as a standalone script or
-even attach in existing project.
+even attached to existing project.
 
 ## Workflow
 **Swifind** work in three simple step:
 
 ### Initiation
-This step consist of initiate `Catfish` object. `Catfish` object is interpreter to convert `swipl` script into Python functions. These functions will be stored in `Strategy` object as `Plan` sequences. `Catfish` object also bring `Bag` object to storing information.
+`Catfish` initiated with `swipl` script path as an argument. `Catfish` will interpret, validate and extract information from `swipl` script. It will store the information into sequence of function that stored in `Strategy` in form of `Plan`. `Catfish` uses `Bag` as a container for extracted or scraped data.
+
+How it works? --
 
 ### Swimming
-This step consist of executing `Plan` in `Strategy`. For data collection activity, each scraped information will be stored in `Bag`. Information inside `Bag` object will be categorized / grouped by `labels`.
+`Catfish` execute all function that assigned to `Strategy`. Each `Plan` in `Strategy` will be execute from `Strategy` origin. For data collection activity, each scraped information will be stored in `Bag`.
 
 ### Unpacking
-This step consist of unpack `Bag` and load its content to somewhere else. For new journey, `Bag` content will be cleared. `Catfish` object will also create journey log, logs of swimming execution.
+`Catfish` return all collected items inside its `Bag`. `Bag` also contains activity or journey logs that can be retrieved with `Catfish` unpack method.
+
+# Swipl Activity
+Currently, there are two activity that available in `swipl`:
+- ORIGIN
+- ACTIVITY
+
+For more info about `swipl`, read this doc.
+
+# Example
+-- HTML example
+-- Swipl script example
+-- Python script example
+-- Return value example
