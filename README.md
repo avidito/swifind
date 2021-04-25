@@ -14,14 +14,12 @@ even attached to existing project.
 ### Initiation
 `Catfish` initiated with `swipl` script path as an argument. `Catfish` will interpret, validate and extract information from `swipl` script. It will store the information into sequence of function that stored in `Strategy` in form of `Plan`. `Catfish` uses `Bag` as a container for extracted or scraped data.
 
-
-
-<details open>
+<details close>
 <summary>How it works?</summary>
 <br>
 <img src="https://github.com/avidito/swifind/blob/doc/doc/interpretation_flow.PNG" alt="interpretation_flow" width="600"/>
 <br>
- 
+
 1. `swipl` script will be validated by `Validator`. `Validator` will check syntax validity of each line or block of component. If there is an error, exception will raised. All of validated component will be parsed into *validated components*.
 2. *Validated components* will be used to generated *plan blueprint* with `Extractor`. `Extractor` will return function and initiated `Plan`.
 3. `Plan` will be assembled to linked list of `Plan`. This sequence of `Plan` is assigned to `Strategy` that attached to existing `Catfish`.
