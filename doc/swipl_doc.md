@@ -7,11 +7,13 @@ Any plan (`swipl` script) must follow this structure:
 Activity is `swipl` command or function. It will be validated and translated to Python function sequence. Some activity need arguments. Activity and each arguments separated with one whitespace. Below are the list of activity in `swipl`:
 
 ### `ORIGIN`
-`origin` is command to tell `Catfish` where is the starting point. `origin` must be placed at the first line of each plan.
+`origin` is a command to tell `Catfish` where is the starting point. `origin` must be placed at the first line of each plan.
 
 Rule:
+- must be defined as the first activity.
 - must be called with one argument: `URL`.
 - `URL` argument must be a string, contain website's URL (without any quotation mark).
+- must be defined as the first activity.
 
 Example:
 ```sh
@@ -19,7 +21,7 @@ ORIGIN https://quotes.toscrape.com/
 ```
 
 ### `PICK`
-`PICK` is command to tell `Catfish` what to collect/scrape from page and save it in its bucket.
+`PICK` is a command to tell `Catfish` what to collect/scrape from page and save it in its bucket.
 
 Rule:
 - must be called two arguments, `ID` and `PATH`.
@@ -42,4 +44,16 @@ PICK quote 'span*{class="text"}'
 PICK author 'small*{class="author"}'
 PICK third_quote 'div*{class="row"} div*{class="col-md-8"} div[2] span'
 PICK login_url 'div*{class="col-md-4"} a*' href
+```
+
+### `SWIM`
+`SWIM` is a command to tell `Catfish` where to go next. `Catfish` will move to new URL and change its view.
+
+Rule:
+- must be called one argument, `URL`.
+- `URL` argument must be a string, contain website's URL (without any quotation mark).
+
+Example:
+```sh
+SWIM https://quotes.toscrape.com/page/2/
 ```

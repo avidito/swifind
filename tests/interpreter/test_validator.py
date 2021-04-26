@@ -5,6 +5,7 @@ from tests.constant import VALIDATE_SWIPL_PATH
 
 from swifind.interpreter.validator import (validate_origin,
                                            validate_pick,
+                                           validate_swim,
                                            validate_swipl)
 from swifind.exception import ArgumentsError
 from swifind.interpreter.parser import parse_swipl
@@ -109,3 +110,28 @@ class TestValidateSwipl(object):
         msg = "'ORIGIN' activity missing required arguments: 'URL' at line 1."
         with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
             validate_swipl(parse_swipl(path))
+
+class TestValidateSwim(object):
+    def test_with_valid_arguments(self):
+        assert validate_swim('https://www.test.com', 1)
+        assert validate_swim('https://sub.check.com', 1)
+        assert validate_swim('www.hello.com', 1)
+
+    def test_with_missing_arguments(self):
+        msg = "'SWIM' activity missing required arguments: 'URL' at line 1."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_swim('', 1)
+
+    def test_with_too_many_arguments(self):
+        msg = "'SWIM' activity takes 1 arguments, but 2 were given at line 1."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_swim('https://www.test.com testing_dot_com', 1)
+
+        msg = "'SWIM' activity takes 1 arguments, but 4 were given at line 1."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_swim('https://www.test.com testing dot com', 1)
+
+    def test_with_invalid_data_type(self):
+        msg = "'URL' from 'SWIM' activity violates swipl rule at line 1."
+        with pytest.raises(ArgumentsError, match=f"^{msg}$") as exception_info:
+            validate_swim("http:\b//www.com", 1)
