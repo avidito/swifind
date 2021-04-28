@@ -5,8 +5,11 @@ LOGIC_CHECK = {
         (lambda st, act: st.rank == 0, 'must be the first component and cannot be redefined.'),
     ],
     'PICK': [
-        (lambda st, act: True, '')
+        (lambda st, act: st.rank > 0, 'must be define aftare ORIGIN activity')
     ],
+    'SWIM': [
+        (lambda st, act: st.rank > 0, 'must be define aftare ORIGIN activity')
+    ]
 }
 
 class Strategy:

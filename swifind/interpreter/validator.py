@@ -59,17 +59,36 @@ def validate_pick(args_raw, line_id):
 
     raise args_error
 
+def validate_swim(args_raw, line_id):
+    # Parse arguments
+    args = re.findall(r"([^'\s]\S*|'.+?')", args_raw)
+    args_error = ArgumentsError('SWIM', line_id)
+    args_count = len(args)
+
+    # Argument Count
+    if (args_count < 1): args_error.missing(argument_missing=ARGUMENTS['SWIM'][args_count])
+    elif(args_count > 1): args_error.over(argument_need=1, argument_given=args_count)
+
+    # Argument Type
+    elif(not args[0].isprintable()): args_error.type(argument_type_error=ARGUMENTS['SWIM'][0])
+    else:
+        return 'SWIM', args, line_id
+
+    raise args_error
+
 """
 Validator Mapper and Function.
 """
 VALIDATORS = {
     'ORIGIN': validate_origin,
-    'PICK': validate_pick
+    'PICK': validate_pick,
+    'SWIM': validate_swim
 }
 
 ARGUMENTS = {
     'ORIGIN': ('URL',),
-    'PICK': ('ID', 'PATH', 'ATTR')
+    'PICK': ('ID', 'PATH', 'ATTR'),
+    'SWIM': ('URL',)
 }
 
 def validate_swipl(components):
