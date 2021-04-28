@@ -49,12 +49,26 @@ def extract_pick(args_raw, line):
 
     return activity
 
+def extract_swim(args_raw, line):
+    [url] = args_raw
+
+    def activity(catfish, order):
+        """
+        Get next page to visit.
+        """
+        req = requests.get(url)
+        catfish.view = BeautifulSoup(req.content, 'lxml', multi_valued_attributes=None)
+        catfish.bag.add_log('SWIM', line, order)
+
+    return activity
+
 """
 Extractor Mapper and Function.
 """
 EXTRACTORS = {
     'ORIGIN': extract_origin,
-    'PICK': extract_pick
+    'PICK': extract_pick,
+    'SWIM': extract_swim,
 }
 
 def extract_swipl(strategy, components):

@@ -6,6 +6,7 @@ from tests.constant import DUMMY_SWIPL
 
 from swifind.interpreter.extractor import (extract_origin,
                                            extract_pick,
+                                           extract_swim,
                                            extract_swipl)
 from swifind.catfish import Catfish
 from swifind.strategy import Strategy, Plan
@@ -130,6 +131,33 @@ class TestExtractPick(object):
         expected_log = {'activity': 'PICK', 'order': 1, 'line': 10, 'status': 'PASS',}
         assert result_log == expected_log
 
+class TestExtractSwim(object):
+    def test_return_value_type(self):
+        func = extract_swim(['https://quotes.toscrape.com/page/10/'], 5)
+        assert isinstance(func, types.FunctionType)
+
+    def test_local_variable_existence(self):
+        func = extract_swim(['https://quotes.toscrape.com/page/10/'], 5)
+        assert ('line', 'url',) == func.__code__.co_freevars
+
+        vars_results = [var.cell_contents for var in func.__closure__]
+        vars_expected = [5, 'https://quotes.toscrape.com/page/10/',]
+        assert vars_results == vars_expected
+
+    def test_with_valid_arguments(self):
+        catfish_test = Catfish(DUMMY_SWIPL)
+        extract_origin(['https://quotes.toscrape.com/'], 1)(catfish_test, 0)
+        func = extract_swim(['https://quotes.toscrape.com/'], 5)
+        func(catfish_test, 1)
+
+        catfish_test_view = catfish_test.view
+        assert catfish_test_view is not None
+        assert isinstance(catfish_test_view, BeautifulSoup)
+
+        result_log = { k: v for k, v in catfish_test.bag.logs['activity'][1].items() if (k != 'timestamp')}
+        expected_log = {'activity': 'SWIM', 'order': 1, 'line': 5, 'status': 'PASS',}
+        assert result_log == expected_log
+
 class TestExtractSwipl(object):
     def test_with_return_values(self):
         strategy_test = Strategy()
@@ -137,10 +165,11 @@ class TestExtractSwipl(object):
                     ['ORIGIN', ['http://www.testing.com'], 1],
                     ['PICK', ['title', "'h1 a'", None], 2],
                     ['PICK', ['link', "'footer div p a'", 'href'], 3],
-                    ['PICK', ['quote', "'div div[1] div'", 'href'], 3],
+                    ['PICK', ['quote', "'div div[1] div'", 'href'], 4],
+                    ['SWIM', ['https://quotes.toscrape.com/page/10/'], 5]
                 ]
         result = extract_swipl(strategy_test, components_test)
         assert isinstance(result, Strategy)
         assert result.head is not None
         assert result.tail is not None
-        assert result.rank == 4
+        assert result.rank == 5

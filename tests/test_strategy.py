@@ -42,7 +42,7 @@ class TestStrategyAddActivity(object):
         strategy_test = Strategy()
         strategy_test.add_activity('ORIGIN', lambda x: x, 1)
         strategy_test.add_activity('PICK', lambda x: x, 2)
-        strategy_test.add_activity('PICK', lambda x: x, 3)
+        strategy_test.add_activity('SWIM', lambda x: x, 3)
 
         assert isinstance(strategy_test.head, Plan)
         assert isinstance(strategy_test.tail, Plan)
