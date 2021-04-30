@@ -8,15 +8,16 @@ from ..strategy import Strategy
 """
 Validator Functions
 
-Factory function that extract each activity arguments and create activity function. Each function use namespace 'extract_', followed by activity name.
+Factory function that extract each activity arguments and create blueprint function. Each function use namespace 'extract_', followed by blueprint name.
 Available activity:
 - ORIGIN
 - PICK
+- SWIM
 """
 def extract_origin(args_raw, line):
     [url] = args_raw
 
-    def activity(catfish, order):
+    def blueprint(catfish, order):
         """
         Get origin page and assign it to strategy.
         """
@@ -24,13 +25,13 @@ def extract_origin(args_raw, line):
         catfish.view = BeautifulSoup(req.content, 'lxml', multi_valued_attributes=None)
         catfish.bag.add_log('ORIGIN', line, order)
 
-    return activity
+    return blueprint
 
 def extract_pick(args_raw, line):
     [id, path, attr] = args_raw
     path = path.strip("'")
 
-    def activity(catfish, order):
+    def blueprint(catfish, order):
         content = catfish.view.find('body')
         for element in path.split(' '):
             if (content is None): break
@@ -47,12 +48,12 @@ def extract_pick(args_raw, line):
         catfish.bag.add_item(id, content)
         catfish.bag.add_log('PICK', line, order)
 
-    return activity
+    return blueprint
 
 def extract_swim(args_raw, line):
     [url] = args_raw
 
-    def activity(catfish, order):
+    def blueprint(catfish, order):
         """
         Get next page to visit.
         """
@@ -60,7 +61,7 @@ def extract_swim(args_raw, line):
         catfish.view = BeautifulSoup(req.content, 'lxml', multi_valued_attributes=None)
         catfish.bag.add_log('SWIM', line, order)
 
-    return activity
+    return blueprint
 
 """
 Extractor Mapper and Function.
@@ -77,6 +78,6 @@ def extract_swipl(strategy, components):
     """
     for component in components:
         plan, args_raw, line = component
-        activity = EXTRACTORS[plan](args_raw, line)
-        strategy.add_activity(plan, activity, line)
+        blueprint = EXTRACTORS[plan](args_raw, line)
+        strategy.add_activity(plan, blueprint, line)
     return strategy

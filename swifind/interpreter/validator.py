@@ -9,6 +9,7 @@ Function to validate each activity. Each function use namespace 'validate_', fol
 Available activity:
 - ORIGIN
 - PICK
+- SWIM
 """
 def validate_origin(args_raw, line_id):
     # Parse arguments

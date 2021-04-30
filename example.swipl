@@ -1,4 +1,10 @@
-ORIGIN https://quotes.toscrape.com/
+IGIN https://quotes.toscrape.com/
 
-PICK title 'h1 a text'
-PICK link 'footer div p a text'
+PICK title 'h1* a'
+PICK first_author 'small*{class="author"}'
+PICK first_quote 'span*{class="text"}'
+
+SWIM https://quotes.toscrape.com/page/10/
+
+PICK last_author 'div*{class="row"} div div[9] small*'
+PICK last_quote 'div*{class="row"} div div[9] span'
