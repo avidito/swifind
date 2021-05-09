@@ -1,4 +1,4 @@
-IGIN https://quotes.toscrape.com/
+ORIGIN https://quotes.toscrape.com/
 
 PICK title 'h1* a'
 PICK first_author 'small*{class="author"}'

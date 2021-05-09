@@ -2,7 +2,7 @@ import json
 from swifind.catfish import Catfish
 
 # Initiation
-path = 'exampl.swipl'
+path = 'example.swipl'
 cf = Catfish(path)
 
 # Swimming
