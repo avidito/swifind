@@ -8,3 +8,6 @@ script:
   - pytest --cov=swifind tests
 after_success:
   - codecov
+branches:
+  only:
+    - main
